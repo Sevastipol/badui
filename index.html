@@ -2,11 +2,85 @@
 <html>
 <head>
 <style>
-  body { font-family: 'Roboto', sans-serif; background-color: #f0f0f0; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+  body { font-family: 'Roboto', sans-serif; background-color: #f0f0f0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
   
-  #status-text { color: #d93025; font-size: 14px; margin-bottom: 8px; font-weight: 500; height: 18px; text-align: center; width: 380px; }
+  /* Product Page Styles */
+  #product-page { text-align: center; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 350px; }
+  .product-img { width: 300px; border-radius: 5px; }
+  .buy-btn { background-color: #0058a3; color: white; border: none; padding: 15px 40px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; border-radius: 50px; width: 100%; }
+  .buy-btn:hover { background-color: #004f93; }
 
+  /* Meme Description */
+  .shark-desc { font-size: 14px; color: #444; line-height: 1.4; margin-top: 10px; font-style: italic; }
+
+  /* Captcha Visibility Toggle */
+  #captcha-wrapper { 
+    display: none; 
+    flex-direction: column; 
+    align-items: center; 
+    position: fixed; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%) scale(1.3);
+    z-index: 1000;
+  }
+
+  /* RECAPTCHA LOADING ANCHOR STYLE */
+  #recaptcha-anchor-box {
+    display: flex;
+    align-items: center;
+    width: 300px;
+    height: 74px;
+    background: #f9f9f9;
+    border: 1px solid #d3d3d3;
+    border-radius: 3px;
+    box-shadow: 0 0 4px rgba(0,0,0,0.05);
+    padding: 0 12px;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  .checkbox-mock { 
+    width: 28px; 
+    height: 28px; 
+    position: relative; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+  }
+  
+  /* The reCAPTCHA specific spinner */
+  .anchor-spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid #4A90E2;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: rc-spin 0.6s linear infinite;
+  }
+
+  @keyframes rc-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .anchor-text { font-size: 14px; color: #555; margin-left: 12px; flex-grow: 1; font-family: 'Roboto', sans-serif; }
+  .anchor-logo { width: 70px; text-align: center; font-size: 8px; color: #555; display: flex; flex-direction: column; align-items: center; }
+  .anchor-logo img { width: 32px; margin-bottom: 2px; }
+  .anchor-logo span { line-height: 1; font-size: 10px; color: #9b9b9b; }
+  
+  /* Overlay for when captcha is active */
+  #page-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 999;
+  }
+
+  /* Your Existing Styles */
+  #status-text { color: #d93025; font-size: 14px; margin-bottom: 8px; font-weight: 500; height: 18px; text-align: center; width: 380px; }
   .captcha-container {
+    display: none; /* Initially hidden while anchor loads */
     width: 380px;
     background: white;
     padding: 8px;
@@ -14,7 +88,6 @@
     border: 1px solid #ccc;
     position: relative;
   }
-
   #loader-overlay {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -25,58 +98,25 @@
     justify-content: center;
     z-index: 100;
   }
-
   .spinner {
-    width: 50px;
-    height: 50px;
+    width: 50px; height: 50px;
     border: 5px solid #f3f3f3;
     border-top: 5px solid #4A90E2;
     border-radius: 50%;
     animation: spin 1s linear infinite;
   }
-
   @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
   .header { background-color: #4A90E2; color: white; padding: 20px; margin-bottom: 4px; }
   .header h2 { margin: 0; font-size: 14px; font-weight: 400; }
   .header h1 { margin: 2px 0; font-size: 26px; font-weight: 900; }
-
-  .grid-wrapper {
-    width: 380px;
-    height: 380px;
-    overflow: hidden;
-    position: relative;
-    background: #ccc;
-  }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(3, 124px);
-    grid-template-rows: repeat(3, 124px);
-    gap: 4px;
-  }
-
-  .tile {
-    width: 124px;
-    height: 124px;
-    position: relative;
-    background: #eee;
-    box-sizing: border-box;
-  }
-
-  .tile.selected {
-    box-shadow: inset 0 0 0 6px #4A90E2;
-  }
-
+  .grid-wrapper { width: 380px; height: 380px; overflow: hidden; position: relative; background: #ccc; }
+  .grid { display: grid; grid-template-columns: repeat(3, 124px); grid-template-rows: repeat(3, 124px); gap: 4px; }
+  .tile { width: 124px; height: 124px; position: relative; background: #eee; box-sizing: border-box; }
+  .tile.selected { box-shadow: inset 0 0 0 6px #4A90E2; }
   .flying-bat {
-    position: absolute;
-    width: 100px;
-    height: 100px;
-    z-index: 10;
-    cursor: pointer;
+    position: absolute; width: 100px; height: 100px; z-index: 10; cursor: pointer;
     animation: chaoticFly 3s infinite ease-in-out;
   }
-
   @keyframes chaoticFly {
     0% { transform: translate(0, 0) scale(1); }
     25% { transform: translate(180px, -50px) scale(1.2); }
@@ -84,50 +124,72 @@
     75% { transform: translate(200px, 200px) scale(1.1); }
     100% { transform: translate(0, 0) scale(1); }
   }
-
-  .ghost-decoy {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.5;
-    cursor: pointer;
-  }
-
+  .ghost-decoy { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; cursor: pointer; }
   .footer { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-top: 1px solid #eee; margin-top: 5px;}
   .icons { color: #777; font-size: 22px; letter-spacing: 5px; }
-  
-  .verify-btn {
-    background-color: #4A90E2; color: white; border: none; padding: 12px 24px;
-    font-weight: bold; cursor: pointer; font-size: 14px;
-  }
+  .verify-btn { background-color: #4A90E2; color: white; border: none; padding: 12px 24px; font-weight: bold; cursor: pointer; font-size: 14px; }
 </style>
 </head>
 <body>
 
-<div id="status-text"></div>
+<div id="product-page">
+  <img src="https://www.ikea.com/nz/en/images/products/blahaj-soft-toy-shark__0710175_pe727378_s5.jpg" alt="Shark" class="product-img">
+  <h1>BLÅHAJ</h1>
+  <p class="shark-desc">is big blue friend. Have much soft and no bone, only stuffing for hug. He protect from scary night and is very friend shape. 100cm of pure shark. Do not the shark, just love he.</p>
+  <button class="buy-btn" onclick="showCaptcha()">BUY</button>
+</div>
 
-<div class="captcha-container">
-  <div id="loader-overlay">
-    <div class="spinner"></div>
-    <p id="loading-text" style="color: #4A90E2; font-weight: bold; margin-top: 10px;">Verifying...</p>
+<div id="page-overlay"></div>
+
+<div id="captcha-wrapper">
+  <div id="recaptcha-anchor-box">
+    <div class="checkbox-mock">
+        <div class="anchor-spinner"></div>
+    </div>
+    <div class="anchor-text">Verifying...</div>
+    <div class="anchor-logo">
+      <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" alt="reCAPTCHA">
+      <span>Privacy - Terms</span>
+    </div>
   </div>
 
-  <div class="header">
-    <h2>Select all squares with</h2>
-    <h1>BATS</h1>
-  </div>
+  <div id="status-text"></div>
+  <div class="captcha-container" id="captcha-main-box">
+    <div id="loader-overlay">
+      <div class="spinner"></div>
+      <p id="loading-text" style="color: #4A90E2; font-weight: bold; margin-top: 10px;">Verifying...</p>
+    </div>
 
-  <div class="grid-wrapper">
-    <div class="grid" id="mainGrid"></div>
-  </div>
+    <div class="header">
+      <h2>Select all squares with</h2>
+      <h1>BATS</h1>
+    </div>
 
-  <div class="footer">
-    <div class="icons">🔄 🎧 ℹ️</div>
-    <button class="verify-btn" onclick="checkAnswer()">VERIFY</button>
+    <div class="grid-wrapper">
+      <div class="grid" id="mainGrid"></div>
+    </div>
+
+    <div class="footer">
+      <div class="icons">🔄 🎧 ℹ️</div>
+      <button class="verify-btn" onclick="checkAnswer()">VERIFY</button>
+    </div>
   </div>
 </div>
 
 <script>
+  function showCaptcha() {
+    document.getElementById('captcha-wrapper').style.display = 'flex';
+    document.getElementById('page-overlay').style.display = 'block';
+    document.getElementById('recaptcha-anchor-box').style.display = 'flex';
+    document.getElementById('captcha-main-box').style.display = 'none';
+
+    setTimeout(() => {
+        document.getElementById('recaptcha-anchor-box').style.display = 'none';
+        document.getElementById('captcha-main-box').style.display = 'block';
+        buildGrid();
+    }, 1800);
+  }
+
   const batGif = "https://gifgifs.com/animations/holidays/halloween/bats_ani.gif";
   const ghostGif = "https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyZzVuM2h0dnBib3owMnVpMG1qYjdoZnhtaTB3ZHo2N2lybjFoNDk4cSZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/xhZyIrYIRJbBhTs1nI/200.gif";
   
@@ -173,8 +235,6 @@
 
   function checkAnswer() {
     loaderEl.style.display = 'flex';
-    
-    // verify
     const randomDelay = Math.floor(Math.random() * 1500) + 500;
 
     setTimeout(() => {
@@ -191,31 +251,25 @@
       });
 
       if (isCorrect && batIndices.length > 0) {
-        // Success
         loaderEl.style.display = 'none';
         statusEl.innerText = "Sorry, something went wrong. Please try again later.";
         
         setTimeout(() => {
-            alert("You win! Made by Sevastipol.");
+            alert("You win, but we are out of stock, so no blahaj for you. Please try again later.");
             buildGrid();
-        }, 2000);
+        }, 2500);
 
       } else {
         loaderEl.style.display = 'none';
-        
-        // troll
-        if (selectedABat) {
+        if (!selectedABat) {
           statusEl.innerText = "You really thought it was going to be that easy?";
         } else {
           statusEl.innerText = "Please try again.";
         }
-        
         setTimeout(buildGrid, 2000);
       }
     }, randomDelay);
   }
-
-  buildGrid();
 </script>
 
 </body>
