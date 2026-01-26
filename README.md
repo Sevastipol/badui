@@ -4,7 +4,7 @@ If you really want a Blåhaj, you are going to have to work for it.
 HOW TO PLAY:
 ---------------------------
 The user has to pass a newly implemented captcha verification to buy the Blåhaj. To do this, click the 'i am not a robot' button and then solve the captcha,
-the captcha requires the user to select all the bats, but doesn't unspecific on which type. (you must **choose all the bats which are animals**, and none of the baseball bats)
+the captcha requires the user to select all the bats, but is unspecific on which type. (you must **choose all the bats which are animals**, and none of the baseball bats)
 Once you've selected the bats, click submit.
 
 WHEN SOLVED:
