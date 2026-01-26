@@ -1,78 +1,98 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLÅHAJ Soft toy, shark - IKEA</title>
 <style>
-  body { font-family: 'Roboto', sans-serif; background-color: #f0f0f0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+  /* --- IKEA LEGITIMACY LAYER --- */
+  body { font-family: 'Noto Sans', 'Roboto', Arial, sans-serif; background-color: #fff; margin: 0; color: #111; overflow-x: hidden; }
+  header { padding: 20px 50px; border-bottom: 1px solid #e5e5e5; display: flex; align-items: center; background: white; }
+  .ikea-logo { background: #0058a3; color: #ffdb00; padding: 10px 15px; font-weight: 900; font-size: 24px; text-decoration: none; display: inline-block; }
   
-  /* Product Page Styles */
-  #product-page { text-align: center; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 350px; position: relative; }
-  .product-img { width: 300px; border-radius: 5px; }
-  .buy-btn { background-color: #0058a3; color: white; border: none; padding: 15px 40px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; border-radius: 50px; width: 100%; transition: background-color 0.3s; }
+  .main-container { max-width: 1200px; margin: 40px auto; display: flex; gap: 60px; padding: 0 20px; }
+  .product-image-section { flex: 1.5; text-align: center; }
+  .product-image-section img.main-shark { width: 100%; max-width: 500px; }
+  
+  .placeholder-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 40px; padding-top: 20px; border-top: 2px dashed #eee; }
+  .placeholder-item { background: #f9f9f9; height: 180px; border-radius: 4px; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid #eee; }
+  .placeholder-item img { width: 100%; height: 100%; object-fit: cover; }
+
+  .product-details { flex: 1; }
+  .product-details h1 { font-size: 32px; margin: 0; font-weight: 700; }
+  .product-details h2 { font-size: 16px; font-weight: 400; color: #484848; margin: 5px 0 20px; }
+  .price { font-size: 28px; font-weight: 700; margin-bottom: 30px; }
+  .price span { font-size: 14px; vertical-align: super; margin-right: 2px; }
+
+  .buy-btn { background-color: #0058a3; color: white; border: none; padding: 20px 40px; font-size: 16px; font-weight: bold; cursor: pointer; border-radius: 50px; width: 100%; transition: background-color 0.3s; }
   .buy-btn:hover { background-color: #004f93; }
 
-  /* Dedicated Out of Stock Status */
-  #oos-status { color: #d93025; font-size: 14px; margin-top: 10px; font-weight: bold; min-height: 20px; }
+  #oos-status { color: #d93025; font-size: 14px; margin-top: 15px; font-weight: bold; min-height: 20px; text-align: center; }
+  .shark-desc { font-size: 14px; color: #444; line-height: 1.6; margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; }
 
-  .shark-desc { font-size: 14px; color: #444; line-height: 1.4; margin-top: 10px; font-style: italic; }
-
-  /* Captcha Visibility Toggle */
-  #captcha-wrapper { 
-    display: none; 
-    flex-direction: column; 
-    align-items: center; 
-    position: fixed; 
-    top: 50%; 
-    left: 50%; 
-    transform: translate(-50%, -50%) scale(1.3);
-    z-index: 1000;
+  /* --- INTRUSIVE UPSELL UI --- */
+  .upsell-overlay {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8); z-index: 2000; align-items: center; justify-content: center;
   }
-
-  #recaptcha-anchor-box {
-    width: 300px; height: 74px; background: #fff; border: 1px solid #d3d3d3;
-    border-radius: 3px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); cursor: pointer; overflow: hidden;
-  }
-  #anchor-image { width: 100%; height: 100%; object-fit: contain; }
   
-  #page-overlay {
-    display: none; position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.7); z-index: 999;
+  .upsell-card {
+    background: white; width: 400px; height: 550px; padding: 30px; border-radius: 2px; text-align: center; position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box;
+  }
+  
+  .close-upsell {
+    position: absolute; top: 10px; right: 15px; font-size: 20px; color: #ccc; 
+    cursor: pointer; font-family: Arial, sans-serif; line-height: 1; z-index: 10;
+  }
+  .close-upsell:hover { color: #111; }
+
+  .upsell-card h3 { 
+    margin: 0; font-size: 20px; color: #0058a3; min-height: 60px; display: flex; align-items: center; justify-content: center;
+    user-select: none; /* Prevents text highlighting on accidental double clicks */
   }
 
+  .upsell-card img { width: 100%; height: 220px; object-fit: contain; margin: 10px 0; user-select: none; -webkit-user-drag: none; }
+  .upsell-card p { font-size: 14px; color: #444; margin-bottom: 20px; min-height: 40px; }
+  .upsell-btns { display: flex; flex-direction: column; gap: 10px; margin-top: auto; }
+  .add-to-cart-btn { background: #0058a3; color: white; border: none; padding: 15px; font-weight: bold; cursor: pointer; }
+
+  /* --- CAPTCHA STYLES --- */
+  #captcha-wrapper { display: none; flex-direction: column; align-items: center; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(1.3); z-index: 1000; user-select: none; }
+  #recaptcha-anchor-box { width: 300px; height: 74px; background: #fff; border: 1px solid #d3d3d3; border-radius: 3px; cursor: pointer; overflow: hidden; }
+  #anchor-image { width: 100%; height: 100%; object-fit: contain; -webkit-user-drag: none; }
+  #page-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; }
   #status-text { color: #d93025; font-size: 14px; margin-bottom: 8px; font-weight: 500; height: 18px; text-align: center; width: 380px; }
-  .captcha-container {
-    display: none; width: 380px; background: white; padding: 8px;
-    box-shadow: 0 0 12px rgba(0,0,0,0.2); border: 1px solid #ccc; position: relative;
-  }
-  #loader-overlay {
-    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(255, 255, 255, 0.95); display: none;
-    flex-direction: column; align-items: center; justify-content: center; z-index: 100;
-  }
-  .spinner {
-    width: 50px; height: 50px; border: 5px solid #f3f3f3;
-    border-top: 5px solid #4A90E2; border-radius: 50%; animation: spin 1s linear infinite;
-  }
+  .captcha-container { display: none; width: 380px; background: white; padding: 8px; box-shadow: 0 0 12px rgba(0,0,0,0.2); border: 1px solid #ccc; position: relative; }
+  
+  #loader-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.95); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 100; }
+  .spinner { width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid #4A90E2; border-radius: 50%; animation: spin 1s linear infinite; }
   @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  
   .header { background-color: #4A90E2; color: white; padding: 20px; margin-bottom: 4px; }
   .header h2 { margin: 0; font-size: 14px; font-weight: 400; }
   .header h1 { margin: 2px 0; font-size: 26px; font-weight: 900; }
+  
   .grid-wrapper { width: 380px; height: 380px; overflow: hidden; position: relative; background: #ccc; }
   .grid { display: grid; grid-template-columns: repeat(3, 124px); grid-template-rows: repeat(3, 124px); gap: 4px; }
   .tile { width: 124px; height: 124px; position: relative; background: #eee; box-sizing: border-box; }
   .tile.selected { box-shadow: inset 0 0 0 6px #4A90E2; }
-  .flying-bat {
-    position: absolute; width: 100px; height: 100px; z-index: 10; cursor: pointer;
-    animation: chaoticFly 3s infinite ease-in-out;
+
+  /* PREVENT SELECTION AND DRAGGING ON BATS AND GHOSTS */
+  .flying-bat { 
+    position: absolute; width: 100px; height: 100px; z-index: 10; cursor: pointer; 
+    animation: chaoticFly 3s infinite ease-in-out; 
+    user-select: none; 
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: transparent;
   }
-  @keyframes chaoticFly {
-    0% { transform: translate(0, 0) scale(1); }
-    25% { transform: translate(180px, -50px) scale(1.2); }
-    50% { transform: translate(-100px, 150px) scale(0.8); }
-    75% { transform: translate(200px, 200px) scale(1.1); }
-    100% { transform: translate(0, 0) scale(1); }
+  .ghost-decoy { 
+    width: 100%; height: 100%; object-fit: cover; opacity: 0.5; cursor: pointer; 
+    user-select: none; 
+    -webkit-user-drag: none;
   }
-  .ghost-decoy { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; cursor: pointer; }
+
+  @keyframes chaoticFly { 0% { transform: translate(0, 0); } 25% { transform: translate(180px, -50px); } 50% { transform: translate(-100px, 150px); } 75% { transform: translate(200px, 200px); } 100% { transform: translate(0, 0); } }
   .footer { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-top: 1px solid #eee; margin-top: 5px;}
   .icons { color: #777; font-size: 22px; letter-spacing: 5px; }
   .verify-btn { background-color: #4A90E2; color: white; border: none; padding: 12px 24px; font-weight: bold; cursor: pointer; font-size: 14px; }
@@ -80,120 +100,126 @@
 </head>
 <body>
 
-<div id="product-page">
-  <img src="https://www.ikea.com/nz/en/images/products/blahaj-soft-toy-shark__0710175_pe727378_s5.jpg" alt="Shark" class="product-img">
-  <h1>BLÅHAJ</h1>
-  <p class="shark-desc">is big blue friend. Have much soft and no bone, only stuffing for hug. 100cm of pure shark. Do not the shark, just love he.</p>
-  <button id="main-buy-btn" class="buy-btn" onclick="handleBuyClick()">BUY</button>
-  <div id="oos-status"></div>
+<header><a href="#" class="ikea-logo">IKEA</a></header>
+
+<div class="main-container">
+  <div class="product-image-section">
+    <img src="https://www.ikea.com/nz/en/images/products/blahaj-soft-toy-shark__0710175_pe727378_s5.jpg" alt="Shark" class="main-shark">
+    <div class="placeholder-grid">
+      <div class="placeholder-item"><img src="https://m.media-amazon.com/images/I/71hs-euA1xL._AC_SL1000__.jpg" alt="Shark Friend 1"></div>
+      <div class="placeholder-item"><img src="https://www.ikea.com/nz/en/images/products/blahaj-soft-toy-baby-shark__0877393_pe730957_s5.jpg" alt="Shark Friend 2"></div>
+      <div class="placeholder-item"><img src="https://img.fruugo.com/product/4/63/591572634_max.jpg" alt="Shark Friend 3"></div>
+    </div>
+  </div>
+  
+  <div class="product-details">
+    <h1>BLÅHAJ</h1>
+    <h2>Soft toy, shark, 100 cm</h2>
+    <div class="price"><span>$</span>39.00</div>
+    <button id="main-buy-btn" class="buy-btn" onclick="handleBuyClick()">Add to shopping bag</button>
+    <div id="oos-status"></div>
+    <p class="shark-desc"><i>is big blue friend. Have much soft and no bone, only stuffing for hug. Do not the shark, just love he.</i></p>
+  </div>
+</div>
+
+<div id="upsell-container" class="upsell-overlay">
+  <div class="upsell-card">
+    <span class="close-upsell" onclick="nextUpsell()">×</span>
+    <h3 id="upsell-title">Don't forget a friend!</h3>
+    <img id="upsell-img" src="">
+    <p id="upsell-desc">Customers who bought BLÅHAJ also loved this!</p>
+    <div class="upsell-btns">
+      <button class="add-to-cart-btn" onclick="nextUpsell()">Yes, add to bag</button>
+    </div>
+  </div>
 </div>
 
 <div id="page-overlay" onclick="closeCaptcha()"></div>
-
 <div id="captcha-wrapper">
-  <div id="recaptcha-anchor-box" onclick="playGifAndContinue()">
-    <img id="anchor-image" src="https://raw.githubusercontent.com/Sevastipol/badui/refs/heads/main/newCaptchaAnchor.png" alt="I'm not a robot">
-  </div>
-
+  <div id="recaptcha-anchor-box" onclick="playGifAndContinue()"><img id="anchor-image" src="https://raw.githubusercontent.com/Sevastipol/badui/refs/heads/main/newCaptchaAnchor.png"></div>
   <div id="status-text"></div>
   <div class="captcha-container" id="captcha-main-box">
-    <div id="loader-overlay">
-      <div class="spinner"></div>
-      <p id="loading-text" style="color: #4A90E2; font-weight: bold; margin-top: 10px;">Verifying...</p>
-    </div>
-
-    <div class="header">
-      <h2>Select all squares with</h2>
-      <h1>BATS</h1>
-    </div>
-
-    <div class="grid-wrapper">
-      <div class="grid" id="mainGrid"></div>
-    </div>
-
-    <div class="footer">
-      <div class="icons">🔄 🎧 ℹ️</div>
-      <button class="verify-btn" onclick="checkAnswer()">VERIFY</button>
-    </div>
+    <div id="loader-overlay"><div class="spinner"></div><p style="color: #4A90E2; font-weight: bold; margin-top: 10px;">Verifying...</p></div>
+    <div class="header"><h2>Select all squares with</h2><h1>BATS</h1></div>
+    <div class="grid-wrapper"><div class="grid" id="mainGrid"></div></div>
+    <div class="footer"><div class="icons">🔄 🎧 ℹ️</div><button class="verify-btn" onclick="checkAnswer()">VERIFY</button></div>
   </div>
 </div>
 
 <script>
-  let trueBuyAvailable = false; // sneaky
+  let trueBuyAvailable = false; 
+  let messageIndex = 0;
+  let batIndices = [];
+  let isLocked = false;
+  
   const staticAnchor = "https://raw.githubusercontent.com/Sevastipol/badui/refs/heads/main/newCaptchaAnchor.png";
   const animatedGif = "https://mashby.com/wp-content/uploads/2018/01/hero-recaptcha-demo.gif";
   const batGif = "https://gifgifs.com/animations/holidays/halloween/bats_ani.gif";
   const ghostGif = "https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyZzVuM2h0dnBib3owMnVpMG1qYjdoZnhtaTB3ZHo2N2lybjFoNDk4cSZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/xhZyIrYIRJbBhTs1nI/200.gif";
-  
-  const gridEl = document.getElementById('mainGrid');
-  const statusEl = document.getElementById('status-text');
-  const oosStatusEl = document.getElementById('oos-status');
-  const loaderEl = document.getElementById('loader-overlay');
-  const buyBtn = document.getElementById('main-buy-btn');
 
-  let batIndices = [];
-  let isLocked = false;
-  let messageIndex = 0;
+  const upsellData = [
+    { name: "DJUNGELSKOG Bear", img: "https://www.ikea.com/nz/en/images/products/djungelskog-soft-toy-brown-bear__0710168_pe727370_s5.jpg?f=xl" },
+    { name: "DJUNGELSKOG Snake", img: "https://www.ikea.com/nz/en/images/products/djungelskog-glove-puppet-snake-burmese-python__0710178_pe727381_s5.jpg?f=xl" },
+    { name: "BLÅVINGAD Octopus", img: "https://www.ikea.com/nz/en/images/products/blavingad-soft-toy-octopus-yellow__1088894_pe861308_s5.jpg?f=xl" },
+    { name: "ÅRSTID Table Lamp", img: "https://www.ikea.com/nz/en/images/products/arstid-table-lamp-brass-white__0609329_pe684454_s5.jpg?f=xl" }
+  ];
+  let currentUpsellIndex = 0;
 
   function handleBuyClick() {
-    if (buyBtn.innerText === "OUT OF STOCK") {
+    if (document.getElementById('main-buy-btn').innerText === "OUT OF STOCK") {
       outOfStock();
     } else if (trueBuyAvailable) {
-      oosStatusEl.innerText = "What... You... bought it? Impressive. I guess you really wanted that shark. It should arrive in 3-5 business days. YOU WIN!";
-      oosStatusEl.style.color = "green";
-      document.getElementById('main-buy-btn').enabled = 'false';
-      document.getElementById('main-buy-btn').textContent = 'Purchased';
-      document.getElementById('main-buy-btn').style.backgroundColor = '#008000';
+      showUpsells();
     } else {
       showCaptcha();
     }
   }
 
+  function showUpsells() {
+    currentUpsellIndex = 0;
+    document.getElementById('upsell-container').style.display = 'flex';
+    updateUpsellContent();
+  }
+
+  function updateUpsellContent() {
+    const item = upsellData[currentUpsellIndex];
+    document.getElementById('upsell-title').innerText = `We think you'd love ${item.name}`;
+    document.getElementById('upsell-img').src = item.img;
+  }
+
+  function nextUpsell() {
+    currentUpsellIndex++;
+    if (currentUpsellIndex < upsellData.length) {
+      updateUpsellContent();
+    } else {
+      document.getElementById('upsell-container').style.display = 'none';
+      document.getElementById('oos-status').innerText = "Order successful! YOU WIN!";
+      document.getElementById('oos-status').style.color = "green";
+      const b = document.getElementById('main-buy-btn');
+      b.disabled = true;
+      b.textContent = 'PURCHASED';
+      b.style.backgroundColor = '#008000';
+    }
+  }
+
   function showCaptcha() {
     if (!isLocked) {
-      if (trueBuyAvailable) {
-        oosStatusEl.innerText = "What... You... bought it? Impressive. I guess you really wanted that shark. It should arrive in 3-5 business days. YOU WIN!";
-        document.getElementById('main-buy-btn').style.display = 'none';
-        oosStatusEl.style.color = "green";
-        return;
-      };
-      isLocked = false;
       document.getElementById('captcha-wrapper').style.display = 'flex';
       document.getElementById('page-overlay').style.display = 'block';
       document.getElementById('recaptcha-anchor-box').style.display = 'block';
       document.getElementById('anchor-image').src = staticAnchor;
       document.getElementById('captcha-main-box').style.display = 'none';
-      statusEl.innerText = '';
     }
   }
 
   function outOfStock() {
-    const messages = [
-      "Out of stock. Sorry!",
-      "Out of stock.",
-      "Its out of stock bro",
-      "Bro its out of stock...",
-      "OUT OF STOCK",
-      "NONE LEFT",
-      "NO MORE SHARK",
-      "Click 1 more time",
-      "Still out of stock",
-      "Why are you still clicking?",
-      "Stop it!",
-      "BRO STOP",
-      "NO. MORE. SHARK.",
-      "User detected as persistent human.",
-      "This is getting awkward...",
-      "Last warning: Stop clicking."
-    ];
-
-  
-    oosStatusEl.innerText = messages[messageIndex];
-    messageIndex = (messageIndex + 1)
-    if (messageIndex > messages.length) {
-      document.getElementById('main-buy-btn').innerText = "BUY";
+    const messages = ["Out of stock. Sorry!", "Its out of stock bro", "OUT OF STOCK", "NO MORE SHARK", "Stop it!", "Last warning: Stop clicking."];
+    document.getElementById('oos-status').innerText = messages[messageIndex % messages.length];
+    messageIndex++;
+    if (messageIndex >= 8) {
+      document.getElementById('main-buy-btn').innerText = "Add to shopping bag";
       document.getElementById('main-buy-btn').style.backgroundColor = "#0058a3";
-      oosStatusEl.innerText = "WHAT??? How did you do that?";
+      document.getElementById('oos-status').innerText = "Fine, take it.";
       trueBuyAvailable = true;
     }
   }
@@ -208,9 +234,7 @@
     if(isLocked) return;
     isLocked = true;
     document.getElementById('anchor-image').src = animatedGif + "?t=" + new Date().getTime();
-
     setTimeout(() => {
-        if (document.getElementById('captcha-wrapper').style.display === 'none') return;
         document.getElementById('recaptcha-anchor-box').style.display = 'none';
         document.getElementById('captcha-main-box').style.display = 'block';
         buildGrid();
@@ -218,73 +242,56 @@
   }
 
   function buildGrid() {
-    loaderEl.style.display = 'none';
-    gridEl.innerHTML = '';
+    document.getElementById('loader-overlay').style.display = 'none';
+    const g = document.getElementById('mainGrid');
+    g.innerHTML = '';
     batIndices = [];
-
     for (let i = 0; i < 9; i++) {
       const isBat = Math.random() > 0.4; 
       if (isBat) batIndices.push(i);
-
       const tile = document.createElement('div');
       tile.className = 'tile';
-      tile.id = `tile-${i}`;
-
       if (isBat) {
         const bat = document.createElement('img');
-        bat.src = batGif;
-        bat.className = 'flying-bat';
-        bat.style.animationDuration = (Math.random() * 3 + 2) + 's';
-        bat.onclick = (e) => {
-          e.stopPropagation();
-          tile.classList.toggle('selected');
-        };
+        bat.src = batGif; bat.className = 'flying-bat';
+        bat.style.animationDelay = (Math.random() * 2) + "s";
+        bat.onclick = (e) => { e.stopPropagation(); tile.classList.toggle('selected'); };
         tile.appendChild(bat);
       } else {
         const ghost = document.createElement('img');
-        ghost.src = ghostGif;
-        ghost.className = 'ghost-decoy';
+        ghost.src = ghostGif; ghost.className = 'ghost-decoy';
         ghost.onclick = () => tile.classList.toggle('selected');
         tile.appendChild(ghost);
       }
-      gridEl.appendChild(tile);
+      g.appendChild(tile);
     }
   }
 
   function checkAnswer() {
-    loaderEl.style.display = 'flex';
-    const randomDelay = Math.floor(Math.random() * 1500) + 500;
-
+    document.getElementById('loader-overlay').style.display = 'flex';
     setTimeout(() => {
       const tiles = document.querySelectorAll('.tile');
       let isCorrect = true;
-      let selectedABat = false;
-
       tiles.forEach((tile, index) => {
-        const selected = tile.classList.contains('selected');
-        const actuallyBat = batIndices.includes(index);
-        if (selected && actuallyBat) selectedABat = true;
-        if (selected !== actuallyBat) isCorrect = false;
+        if (tile.classList.contains('selected') !== batIndices.includes(index)) isCorrect = false;
       });
-
       if (isCorrect && batIndices.length > 0) {
-        loaderEl.style.display = 'none';
-        statusEl.innerText = "Sorry, something went wrong. Please try again later.";
-        
+        document.getElementById('loader-overlay').style.display = 'none';
+        document.getElementById('status-text').innerText = "Sorry, something went wrong. Please try again later.";
         setTimeout(() => {
-            buyBtn.innerText = "OUT OF STOCK";
-            buyBtn.style.backgroundColor = "#888";
+            document.getElementById('main-buy-btn').innerText = "OUT OF STOCK";
+            document.getElementById('main-buy-btn').style.backgroundColor = "#888";
             closeCaptcha();
-            buildGrid();
-        }, 2500);
-
+        }, 3000);
       } else {
-        loaderEl.style.display = 'none';
-        statusEl.innerText = !selectedABat ? "You really thought it was going to be that easy?" : "Please try again.";
-        setTimeout(() => { statusEl.innerText = ""; }, 2500);
-        setTimeout(buildGrid, 0);
+        document.getElementById('loader-overlay').style.display = 'none';
+        document.getElementById('status-text').innerText = "Please try again.";
+        setTimeout(() => {
+            document.getElementById('status-text').innerText = "";
+        }, 3000);
+        buildGrid();
       }
-    }, randomDelay);
+    }, 1500);
   }
 </script>
 
