@@ -192,7 +192,6 @@
     loaderEl.style.display = 'none';
     gridEl.innerHTML = '';
     batIndices = [];
-    statusEl.innerText = '';
 
     for (let i = 0; i < 9; i++) {
       const isBat = Math.random() > 0.4; 
@@ -253,8 +252,14 @@
         loaderEl.style.display = 'none';
         if (!selectedABat) {
           statusEl.innerText = "You really thought it was going to be that easy?";
+          setTimeout(() => {
+            statusEl.innerText = "";
+        }, 2500);
         } else {
           statusEl.innerText = "Please try again.";
+          setTimeout(() => {
+            statusEl.innerText = "";
+        }, 2500);
         }
         setTimeout(buildGrid, 2000);
       }
