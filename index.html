@@ -25,48 +25,22 @@
     z-index: 1000;
   }
 
-  /* RECAPTCHA LOADING ANCHOR STYLE */
+  /* STATIC TO GIF ANCHOR STYLE */
   #recaptcha-anchor-box {
-    display: flex;
-    align-items: center;
     width: 300px;
     height: 74px;
-    background: #f9f9f9;
+    background: #fff;
     border: 1px solid #d3d3d3;
     border-radius: 3px;
-    box-shadow: 0 0 4px rgba(0,0,0,0.05);
-    padding: 0 12px;
-    margin-bottom: 10px;
-    position: relative;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    cursor: pointer;
+    overflow: hidden;
   }
-  .checkbox-mock { 
-    width: 28px; 
-    height: 28px; 
-    position: relative; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
+  #anchor-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
   }
-  
-  /* The reCAPTCHA specific spinner */
-  .anchor-spinner {
-    width: 24px;
-    height: 24px;
-    border: 3px solid #4A90E2;
-    border-right-color: transparent;
-    border-radius: 50%;
-    animation: rc-spin 0.6s linear infinite;
-  }
-
-  @keyframes rc-spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-
-  .anchor-text { font-size: 14px; color: #555; margin-left: 12px; flex-grow: 1; font-family: 'Roboto', sans-serif; }
-  .anchor-logo { width: 70px; text-align: center; font-size: 8px; color: #555; display: flex; flex-direction: column; align-items: center; }
-  .anchor-logo img { width: 32px; margin-bottom: 2px; }
-  .anchor-logo span { line-height: 1; font-size: 10px; color: #9b9b9b; }
   
   /* Overlay for when captcha is active */
   #page-overlay {
@@ -75,12 +49,13 @@
     top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.7);
     z-index: 999;
+    cursor: pointer; /* Suggests clicking out is possible */
   }
 
   /* Your Existing Styles */
   #status-text { color: #d93025; font-size: 14px; margin-bottom: 8px; font-weight: 500; height: 18px; text-align: center; width: 380px; }
   .captcha-container {
-    display: none; /* Initially hidden while anchor loads */
+    display: none; 
     width: 380px;
     background: white;
     padding: 8px;
@@ -135,22 +110,15 @@
 <div id="product-page">
   <img src="https://www.ikea.com/nz/en/images/products/blahaj-soft-toy-shark__0710175_pe727378_s5.jpg" alt="Shark" class="product-img">
   <h1>BLÅHAJ</h1>
-  <p class="shark-desc">is big blue friend. Have much soft and no bone, only stuffing for hug. He protect from scary night and is very friend shape. 100cm of pure shark. Do not the shark, just love he.</p>
+  <p class="shark-desc">is big blue friend. Have much soft and no bone, only stuffing for hug. 100cm of pure shark. Do not the shark, just love he.</p>
   <button class="buy-btn" onclick="showCaptcha()">BUY</button>
 </div>
 
-<div id="page-overlay"></div>
+<div id="page-overlay" onclick="closeCaptcha()"></div>
 
 <div id="captcha-wrapper">
-  <div id="recaptcha-anchor-box">
-    <div class="checkbox-mock">
-        <div class="anchor-spinner"></div>
-    </div>
-    <div class="anchor-text">Verifying...</div>
-    <div class="anchor-logo">
-      <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" alt="reCAPTCHA">
-      <span>Privacy - Terms</span>
-    </div>
+  <div id="recaptcha-anchor-box" onclick="playGifAndContinue()">
+    <img id="anchor-image" src="https://i.ibb.co/W4KCF2xF/new-Captcha-Anchor.png" alt="I'm not a robot">
   </div>
 
   <div id="status-text"></div>
@@ -177,19 +145,8 @@
 </div>
 
 <script>
-  function showCaptcha() {
-    document.getElementById('captcha-wrapper').style.display = 'flex';
-    document.getElementById('page-overlay').style.display = 'block';
-    document.getElementById('recaptcha-anchor-box').style.display = 'flex';
-    document.getElementById('captcha-main-box').style.display = 'none';
-
-    setTimeout(() => {
-        document.getElementById('recaptcha-anchor-box').style.display = 'none';
-        document.getElementById('captcha-main-box').style.display = 'block';
-        buildGrid();
-    }, 1800);
-  }
-
+  const staticAnchor = "https://i.ibb.co/W4KCF2xF/new-Captcha-Anchor.png";
+  const animatedGif = "https://mashby.com/wp-content/uploads/2018/01/hero-recaptcha-demo.gif";
   const batGif = "https://gifgifs.com/animations/holidays/halloween/bats_ani.gif";
   const ghostGif = "https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyZzVuM2h0dnBib3owMnVpMG1qYjdoZnhtaTB3ZHo2N2lybjFoNDk4cSZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/xhZyIrYIRJbBhTs1nI/200.gif";
   
@@ -197,6 +154,39 @@
   const statusEl = document.getElementById('status-text');
   const loaderEl = document.getElementById('loader-overlay');
   let batIndices = [];
+  let isLocked = false;
+
+  function showCaptcha() {
+    isLocked = false;
+    document.getElementById('captcha-wrapper').style.display = 'flex';
+    document.getElementById('page-overlay').style.display = 'block';
+    document.getElementById('recaptcha-anchor-box').style.display = 'block';
+    document.getElementById('anchor-image').src = staticAnchor;
+    document.getElementById('captcha-main-box').style.display = 'none';
+    statusEl.innerText = '';
+  }
+
+  // New function to handle closing when clicking outside
+  function closeCaptcha() {
+    document.getElementById('captcha-wrapper').style.display = 'none';
+    document.getElementById('page-overlay').style.display = 'none';
+  }
+
+  function playGifAndContinue() {
+    if(isLocked) return;
+    isLocked = true;
+
+    document.getElementById('anchor-image').src = animatedGif + "?t=" + new Date().getTime();
+
+    setTimeout(() => {
+        // If the user closed it during the animation, don't show the grid
+        if (document.getElementById('captcha-wrapper').style.display === 'none') return;
+        
+        document.getElementById('recaptcha-anchor-box').style.display = 'none';
+        document.getElementById('captcha-main-box').style.display = 'block';
+        buildGrid();
+    }, 3600);
+  }
 
   function buildGrid() {
     loaderEl.style.display = 'none';
