@@ -5,12 +5,14 @@
   body { font-family: 'Roboto', sans-serif; background-color: #f0f0f0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
   
   /* Product Page Styles */
-  #product-page { text-align: center; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 350px; }
+  #product-page { text-align: center; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 350px; position: relative; }
   .product-img { width: 300px; border-radius: 5px; }
-  .buy-btn { background-color: #0058a3; color: white; border: none; padding: 15px 40px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; border-radius: 50px; width: 100%; }
+  .buy-btn { background-color: #0058a3; color: white; border: none; padding: 15px 40px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; border-radius: 50px; width: 100%; transition: background-color 0.3s; }
   .buy-btn:hover { background-color: #004f93; }
 
-  /* Meme Description */
+  /* Dedicated Out of Stock Status */
+  #oos-status { color: #d93025; font-size: 14px; margin-top: 10px; font-weight: bold; min-height: 20px; }
+
   .shark-desc { font-size: 14px; color: #444; line-height: 1.4; margin-top: 10px; font-style: italic; }
 
   /* Captcha Visibility Toggle */
@@ -25,60 +27,31 @@
     z-index: 1000;
   }
 
-  /* STATIC TO GIF ANCHOR STYLE */
   #recaptcha-anchor-box {
-    width: 300px;
-    height: 74px;
-    background: #fff;
-    border: 1px solid #d3d3d3;
-    border-radius: 3px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    cursor: pointer;
-    overflow: hidden;
+    width: 300px; height: 74px; background: #fff; border: 1px solid #d3d3d3;
+    border-radius: 3px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); cursor: pointer; overflow: hidden;
   }
-  #anchor-image {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
+  #anchor-image { width: 100%; height: 100%; object-fit: contain; }
   
-  /* Overlay for when captcha is active */
   #page-overlay {
-    display: none;
-    position: fixed;
+    display: none; position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.7);
-    z-index: 999;
-    cursor: pointer; /* Suggests clicking out */
+    background: rgba(0,0,0,0.7); z-index: 999;
   }
 
-  /* Your Existing Styles */
   #status-text { color: #d93025; font-size: 14px; margin-bottom: 8px; font-weight: 500; height: 18px; text-align: center; width: 380px; }
   .captcha-container {
-    display: none; 
-    width: 380px;
-    background: white;
-    padding: 8px;
-    box-shadow: 0 0 12px rgba(0,0,0,0.2);
-    border: 1px solid #ccc;
-    position: relative;
+    display: none; width: 380px; background: white; padding: 8px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.2); border: 1px solid #ccc; position: relative;
   }
   #loader-overlay {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(255, 255, 255, 0.95);
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255, 255, 255, 0.95); display: none;
+    flex-direction: column; align-items: center; justify-content: center; z-index: 100;
   }
   .spinner {
-    width: 50px; height: 50px;
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid #4A90E2;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
+    width: 50px; height: 50px; border: 5px solid #f3f3f3;
+    border-top: 5px solid #4A90E2; border-radius: 50%; animation: spin 1s linear infinite;
   }
   @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   .header { background-color: #4A90E2; color: white; padding: 20px; margin-bottom: 4px; }
@@ -111,7 +84,8 @@
   <img src="https://www.ikea.com/nz/en/images/products/blahaj-soft-toy-shark__0710175_pe727378_s5.jpg" alt="Shark" class="product-img">
   <h1>BLÅHAJ</h1>
   <p class="shark-desc">is big blue friend. Have much soft and no bone, only stuffing for hug. 100cm of pure shark. Do not the shark, just love he.</p>
-  <button class="buy-btn" onclick="if(document.querySelector('.buy-btn').textContent !== 'OUT OF STOCK') showCaptcha()">BUY</button>
+  <button id="main-buy-btn" class="buy-btn" onclick="handleBuyClick()">BUY</button>
+  <div id="oos-status"></div>
 </div>
 
 <div id="page-overlay" onclick="closeCaptcha()"></div>
@@ -145,6 +119,7 @@
 </div>
 
 <script>
+  let trueBuyAvailable = false; // sneaky
   const staticAnchor = "https://raw.githubusercontent.com/Sevastipol/badui/refs/heads/main/newCaptchaAnchor.png";
   const animatedGif = "https://mashby.com/wp-content/uploads/2018/01/hero-recaptcha-demo.gif";
   const batGif = "https://gifgifs.com/animations/holidays/halloween/bats_ani.gif";
@@ -152,27 +127,77 @@
   
   const gridEl = document.getElementById('mainGrid');
   const statusEl = document.getElementById('status-text');
+  const oosStatusEl = document.getElementById('oos-status');
   const loaderEl = document.getElementById('loader-overlay');
+  const buyBtn = document.getElementById('main-buy-btn');
+
   let batIndices = [];
   let isLocked = false;
+  let messageIndex = 0;
 
-  function showCaptcha() {
-    if (!isLocked) {
-
-    
-    isLocked = false;
-    document.getElementById('captcha-wrapper').style.display = 'flex';
-    document.getElementById('page-overlay').style.display = 'block';
-    document.getElementById('recaptcha-anchor-box').style.display = 'block';
-    document.getElementById('anchor-image').src = staticAnchor;
-    document.getElementById('captcha-main-box').style.display = 'none';
-    statusEl.innerText = '';
+  function handleBuyClick() {
+    if (buyBtn.innerText === "OUT OF STOCK") {
+      outOfStock();
+    } else if (trueBuyAvailable) {
+      oosStatusEl.innerText = "What... You... bought it? Impressive. I guess you really wanted that shark. It should arrive in 3-5 business days. YOU WIN!";
+      oosStatusEl.style.color = "green";
+      document.getElementById('main-buy-btn').enabled = 'false';
+      document.getElementById('main-buy-btn').textContent = 'Purchased';
+      document.getElementById('main-buy-btn').style.backgroundColor = '#008000';
     } else {
-      statusEl.innerText = "its out of stock bro";
+      showCaptcha();
     }
   }
 
-  // handle closing when clicking outside
+  function showCaptcha() {
+    if (!isLocked) {
+      if (trueBuyAvailable) {
+        oosStatusEl.innerText = "What... You... bought it? Impressive. I guess you really wanted that shark. It should arrive in 3-5 business days. YOU WIN!";
+        document.getElementById('main-buy-btn').style.display = 'none';
+        oosStatusEl.style.color = "green";
+        return;
+      };
+      isLocked = false;
+      document.getElementById('captcha-wrapper').style.display = 'flex';
+      document.getElementById('page-overlay').style.display = 'block';
+      document.getElementById('recaptcha-anchor-box').style.display = 'block';
+      document.getElementById('anchor-image').src = staticAnchor;
+      document.getElementById('captcha-main-box').style.display = 'none';
+      statusEl.innerText = '';
+    }
+  }
+
+  function outOfStock() {
+    const messages = [
+      "Out of stock. Sorry!",
+      "Out of stock.",
+      "Its out of stock bro",
+      "Bro its out of stock...",
+      "OUT OF STOCK",
+      "NONE LEFT",
+      "NO MORE SHARK",
+      "Click 1 more time",
+      "Still out of stock",
+      "Why are you still clicking?",
+      "Stop it!",
+      "BRO STOP",
+      "NO. MORE. SHARK.",
+      "User detected as persistent human.",
+      "This is getting awkward...",
+      "Last warning: Stop clicking."
+    ];
+
+  
+    oosStatusEl.innerText = messages[messageIndex];
+    messageIndex = (messageIndex + 1)
+    if (messageIndex > messages.length) {
+      document.getElementById('main-buy-btn').innerText = "BUY";
+      document.getElementById('main-buy-btn').style.backgroundColor = "#0058a3";
+      oosStatusEl.innerText = "WHAT??? How did you do that?";
+      trueBuyAvailable = true;
+    }
+  }
+
   function closeCaptcha() {
     document.getElementById('captcha-wrapper').style.display = 'none';
     document.getElementById('page-overlay').style.display = 'none';
@@ -182,13 +207,10 @@
   function playGifAndContinue() {
     if(isLocked) return;
     isLocked = true;
-
     document.getElementById('anchor-image').src = animatedGif + "?t=" + new Date().getTime();
 
     setTimeout(() => {
-        // If the user closed it during the animation, don't show
         if (document.getElementById('captcha-wrapper').style.display === 'none') return;
-        
         document.getElementById('recaptcha-anchor-box').style.display = 'none';
         document.getElementById('captcha-main-box').style.display = 'block';
         buildGrid();
@@ -241,7 +263,6 @@
       tiles.forEach((tile, index) => {
         const selected = tile.classList.contains('selected');
         const actuallyBat = batIndices.includes(index);
-        
         if (selected && actuallyBat) selectedABat = true;
         if (selected !== actuallyBat) isCorrect = false;
       });
@@ -251,26 +272,16 @@
         statusEl.innerText = "Sorry, something went wrong. Please try again later.";
         
         setTimeout(() => {
-            alert("You win, but we are out of stock, so no blahaj for you. Please try again later.");
-            document.querySelector('.buy-btn').innerText = "OUT OF STOCK";
-            document.querySelector('.buy-btn').style.backgroundColor = "#888";
+            buyBtn.innerText = "OUT OF STOCK";
+            buyBtn.style.backgroundColor = "#888";
             closeCaptcha();
             buildGrid();
         }, 2500);
 
       } else {
         loaderEl.style.display = 'none';
-        if (!selectedABat) {
-          statusEl.innerText = "You really thought it was going to be that easy?";
-          setTimeout(() => {
-            statusEl.innerText = "";
-        }, 2500);
-        } else {
-          statusEl.innerText = "Please try again.";
-          setTimeout(() => {
-            statusEl.innerText = "";
-        }, 2500);
-        }
+        statusEl.innerText = !selectedABat ? "You really thought it was going to be that easy?" : "Please try again.";
+        setTimeout(() => { statusEl.innerText = ""; }, 2500);
         setTimeout(buildGrid, 0);
       }
     }, randomDelay);
