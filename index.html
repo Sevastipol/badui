@@ -174,7 +174,7 @@
   function checkAnswer() {
     loaderEl.style.display = 'flex';
     
-    // Simulating a slightly faster verification check
+    // verify
     const randomDelay = Math.floor(Math.random() * 1500) + 500;
 
     setTimeout(() => {
@@ -191,7 +191,7 @@
       });
 
       if (isCorrect && batIndices.length > 0) {
-        // Success scenario with the contradictory error message
+        // Success
         loaderEl.style.display = 'none';
         statusEl.innerText = "Sorry, something went wrong. Please try again later.";
         
