@@ -49,7 +49,7 @@
     top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.7);
     z-index: 999;
-    cursor: pointer; /* Suggests clicking out is possible */
+    cursor: pointer; /* Suggests clicking out */
   }
 
   /* Your Existing Styles */
@@ -166,7 +166,7 @@
     statusEl.innerText = '';
   }
 
-  // New function to handle closing when clicking outside
+  // handle closing when clicking outside
   function closeCaptcha() {
     document.getElementById('captcha-wrapper').style.display = 'none';
     document.getElementById('page-overlay').style.display = 'none';
@@ -179,7 +179,7 @@
     document.getElementById('anchor-image').src = animatedGif + "?t=" + new Date().getTime();
 
     setTimeout(() => {
-        // If the user closed it during the animation, don't show the grid
+        // If the user closed it during the animation, don't show
         if (document.getElementById('captcha-wrapper').style.display === 'none') return;
         
         document.getElementById('recaptcha-anchor-box').style.display = 'none';
