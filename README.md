@@ -14,6 +14,6 @@ and keep clicking the button until new Blåhajs come into stock.
 
 IN STOCK:
 ---------------------------
-Simply click **BUY** and the Blåhaj is yours!
+Simply click **BUY** and the Blåhaj is yours! (you will have to decide if you want to buy some recomendations ofc)
 
 _Made by Sevastipol_
