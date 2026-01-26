@@ -2,5 +2,3 @@ Developers at IKEA have recently implemented a new cutting-edge security feature
 If you really want a Blåhaj, you are going to have to work for it.
 
 INSTRUCTIONS: Please select all the bats.
-
-MADE WITHIN A HOUR BEFORE ENDING!!!
