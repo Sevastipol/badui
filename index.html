@@ -111,7 +111,7 @@
   <img src="https://www.ikea.com/nz/en/images/products/blahaj-soft-toy-shark__0710175_pe727378_s5.jpg" alt="Shark" class="product-img">
   <h1>BLÅHAJ</h1>
   <p class="shark-desc">is big blue friend. Have much soft and no bone, only stuffing for hug. 100cm of pure shark. Do not the shark, just love he.</p>
-  <button class="buy-btn" onclick="showCaptcha()">BUY</button>
+  <button class="buy-btn" onclick="if(document.querySelector('.buy-btn').textContent !== 'OUT OF STOCK') showCaptcha()">BUY</button>
 </div>
 
 <div id="page-overlay" onclick="closeCaptcha()"></div>
@@ -157,6 +157,9 @@
   let isLocked = false;
 
   function showCaptcha() {
+    if (!isLocked) {
+
+    
     isLocked = false;
     document.getElementById('captcha-wrapper').style.display = 'flex';
     document.getElementById('page-overlay').style.display = 'block';
@@ -164,12 +167,16 @@
     document.getElementById('anchor-image').src = staticAnchor;
     document.getElementById('captcha-main-box').style.display = 'none';
     statusEl.innerText = '';
+    } else {
+      statusEl.innerText = "its out of stock bro";
+    }
   }
 
   // handle closing when clicking outside
   function closeCaptcha() {
     document.getElementById('captcha-wrapper').style.display = 'none';
     document.getElementById('page-overlay').style.display = 'none';
+    isLocked = false;
   }
 
   function playGifAndContinue() {
