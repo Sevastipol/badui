@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { font-family: 'Roboto', sans-serif; background-color: #f0f0f0; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+  
+  #status-text { color: #d93025; font-size: 14px; margin-bottom: 8px; font-weight: 500; height: 18px; text-align: center; width: 380px; }
+
+  .captcha-container {
+    width: 380px;
+    background: white;
+    padding: 8px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.2);
+    border: 1px solid #ccc;
+    position: relative;
+  }
+
+  #loader-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255, 255, 255, 0.95);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+  }
+
+  .spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #4A90E2;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+  .header { background-color: #4A90E2; color: white; padding: 20px; margin-bottom: 4px; }
+  .header h2 { margin: 0; font-size: 14px; font-weight: 400; }
+  .header h1 { margin: 2px 0; font-size: 26px; font-weight: 900; }
+
+  .grid-wrapper {
+    width: 380px;
+    height: 380px;
+    overflow: hidden;
+    position: relative;
+    background: #ccc;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 124px);
+    grid-template-rows: repeat(3, 124px);
+    gap: 4px;
+  }
+
+  .tile {
+    width: 124px;
+    height: 124px;
+    position: relative;
+    background: #eee;
+    box-sizing: border-box;
+  }
+
+  .tile.selected {
+    box-shadow: inset 0 0 0 6px #4A90E2;
+  }
+
+  .flying-bat {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    z-index: 10;
+    cursor: pointer;
+    animation: chaoticFly 3s infinite ease-in-out;
+  }
+
+  @keyframes chaoticFly {
+    0% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(180px, -50px) scale(1.2); }
+    50% { transform: translate(-100px, 150px) scale(0.8); }
+    75% { transform: translate(200px, 200px) scale(1.1); }
+    100% { transform: translate(0, 0) scale(1); }
+  }
+
+  .ghost-decoy {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.5;
+    cursor: pointer;
+  }
+
+  .footer { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-top: 1px solid #eee; margin-top: 5px;}
+  .icons { color: #777; font-size: 22px; letter-spacing: 5px; }
+  
+  .verify-btn {
+    background-color: #4A90E2; color: white; border: none; padding: 12px 24px;
+    font-weight: bold; cursor: pointer; font-size: 14px;
+  }
+</style>
+</head>
+<body>
+
+<div id="status-text"></div>
+
+<div class="captcha-container">
+  <div id="loader-overlay">
+    <div class="spinner"></div>
+    <p id="loading-text" style="color: #4A90E2; font-weight: bold; margin-top: 10px;">Verifying...</p>
+  </div>
+
+  <div class="header">
+    <h2>Select all squares with</h2>
+    <h1>BATS</h1>
+  </div>
+
+  <div class="grid-wrapper">
+    <div class="grid" id="mainGrid"></div>
+  </div>
+
+  <div class="footer">
+    <div class="icons">🔄 🎧 ℹ️</div>
+    <button class="verify-btn" onclick="checkAnswer()">VERIFY</button>
+  </div>
+</div>
+
+<script>
+  const batGif = "https://gifgifs.com/animations/holidays/halloween/bats_ani.gif";
+  const ghostGif = "https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyZzVuM2h0dnBib3owMnVpMG1qYjdoZnhtaTB3ZHo2N2lybjFoNDk4cSZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/xhZyIrYIRJbBhTs1nI/200.gif";
+  
+  const gridEl = document.getElementById('mainGrid');
+  const statusEl = document.getElementById('status-text');
+  const loaderEl = document.getElementById('loader-overlay');
+  let batIndices = [];
+
+  function buildGrid() {
+    loaderEl.style.display = 'none';
+    gridEl.innerHTML = '';
+    batIndices = [];
+    statusEl.innerText = '';
+
+    for (let i = 0; i < 9; i++) {
+      const isBat = Math.random() > 0.4; 
+      if (isBat) batIndices.push(i);
+
+      const tile = document.createElement('div');
+      tile.className = 'tile';
+      tile.id = `tile-${i}`;
+
+      if (isBat) {
+        const bat = document.createElement('img');
+        bat.src = batGif;
+        bat.className = 'flying-bat';
+        bat.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        bat.onclick = (e) => {
+          e.stopPropagation();
+          tile.classList.toggle('selected');
+        };
+        tile.appendChild(bat);
+      } else {
+        const ghost = document.createElement('img');
+        ghost.src = ghostGif;
+        ghost.className = 'ghost-decoy';
+        ghost.onclick = () => tile.classList.toggle('selected');
+        tile.appendChild(ghost);
+      }
+      gridEl.appendChild(tile);
+    }
+  }
+
+  function checkAnswer() {
+    loaderEl.style.display = 'flex';
+    
+    // Simulating a slightly faster verification check
+    const randomDelay = Math.floor(Math.random() * 1500) + 500;
+
+    setTimeout(() => {
+      const tiles = document.querySelectorAll('.tile');
+      let isCorrect = true;
+      let selectedABat = false;
+
+      tiles.forEach((tile, index) => {
+        const selected = tile.classList.contains('selected');
+        const actuallyBat = batIndices.includes(index);
+        
+        if (selected && actuallyBat) selectedABat = true;
+        if (selected !== actuallyBat) isCorrect = false;
+      });
+
+      if (isCorrect && batIndices.length > 0) {
+        // Success scenario with the contradictory error message
+        loaderEl.style.display = 'none';
+        statusEl.innerText = "Sorry, something went wrong. Please try again later.";
+        
+        setTimeout(() => {
+            alert("You win! Made by Sevastipol.");
+            buildGrid();
+        }, 2000);
+
+      } else {
+        loaderEl.style.display = 'none';
+        
+        // troll
+        if (selectedABat) {
+          statusEl.innerText = "You really thought it was going to be that easy?";
+        } else {
+          statusEl.innerText = "Please try again.";
+        }
+        
+        setTimeout(buildGrid, 2000);
+      }
+    }, randomDelay);
+  }
+
+  buildGrid();
+</script>
+
+</body>
+</html>
