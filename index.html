@@ -118,7 +118,7 @@
 
 <div id="captcha-wrapper">
   <div id="recaptcha-anchor-box" onclick="playGifAndContinue()">
-    <img id="anchor-image" src="https://i.ibb.co/W4KCF2xF/new-Captcha-Anchor.png" alt="I'm not a robot">
+    <img id="anchor-image" src="https://raw.githubusercontent.com/Sevastipol/badui/refs/heads/main/newCaptchaAnchor.png" alt="I'm not a robot">
   </div>
 
   <div id="status-text"></div>
@@ -145,7 +145,7 @@
 </div>
 
 <script>
-  const staticAnchor = "https://i.ibb.co/W4KCF2xF/new-Captcha-Anchor.png";
+  const staticAnchor = "https://raw.githubusercontent.com/Sevastipol/badui/refs/heads/main/newCaptchaAnchor.png";
   const animatedGif = "https://mashby.com/wp-content/uploads/2018/01/hero-recaptcha-demo.gif";
   const batGif = "https://gifgifs.com/animations/holidays/halloween/bats_ani.gif";
   const ghostGif = "https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyZzVuM2h0dnBib3owMnVpMG1qYjdoZnhtaTB3ZHo2N2lybjFoNDk4cSZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/xhZyIrYIRJbBhTs1nI/200.gif";
@@ -245,6 +245,9 @@
         
         setTimeout(() => {
             alert("You win, but we are out of stock, so no blahaj for you. Please try again later.");
+            document.querySelector('.buy-btn').innerText = "OUT OF STOCK";
+            document.querySelector('.buy-btn').style.backgroundColor = "#888";
+            closeCaptcha();
             buildGrid();
         }, 2500);
 
@@ -261,7 +264,7 @@
             statusEl.innerText = "";
         }, 2500);
         }
-        setTimeout(buildGrid, 2000);
+        setTimeout(buildGrid, 0);
       }
     }, randomDelay);
   }
