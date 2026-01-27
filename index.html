@@ -7,8 +7,60 @@
 <style>
   /* --- IKEA LEGITIMACY LAYER --- */
   body { font-family: 'Noto Sans', 'Roboto', Arial, sans-serif; background-color: #fff; margin: 0; color: #111; overflow-x: hidden; }
-  header { padding: 20px 50px; border-bottom: 1px solid #e5e5e5; display: flex; align-items: center; background: white; }
+  header { padding: 20px 50px; border-bottom: 1px solid #e5e5e5; display: flex; align-items: center; justify-content: space-between; background: white; }
   .ikea-logo { background: #0058a3; color: #ffdb00; padding: 10px 15px; font-weight: 900; font-size: 24px; text-decoration: none; display: inline-block; }
+  
+  /* Shopping Cart Icon */
+  .cart-icon-container { position: relative; cursor: pointer; }
+  .cart-icon { font-size: 28px; }
+  .cart-count { position: absolute; top: -8px; right: -8px; background: #d93025; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; }
+  
+  /* Notification Toast */
+  .notification-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 3000; display: flex; flex-direction: column; gap: 10px; align-items: center; pointer-events: none; }
+  .notification { background: #0058a3; color: white; padding: 16px 24px; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 12px; min-width: 300px; animation: slideDown 0.3s ease-out; pointer-events: auto; }
+  @keyframes slideDown { from { transform: translateY(-100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .notification.fade-out { animation: fadeOut 0.3s ease-out forwards; }
+  @keyframes fadeOut { to { opacity: 0; transform: translateY(-20px); } }
+  .notification .check-icon { font-size: 24px; }
+  
+  /* Shopping Cart Sidebar */
+  .cart-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 2400; }
+  .cart-overlay.show { display: block; }
+  .cart-sidebar { position: fixed; right: -420px; top: 0; width: 420px; height: 100%; background: white; box-shadow: -2px 0 10px rgba(0,0,0,0.2); z-index: 2500; transition: right 0.3s ease; display: flex; flex-direction: column; }
+  .cart-sidebar.open { right: 0; }
+  .cart-header { padding: 24px; border-bottom: 1px solid #e5e5e5; display: flex; justify-content: space-between; align-items: center; }
+  .cart-header h2 { margin: 0; font-size: 24px; }
+  .close-cart { font-size: 28px; cursor: pointer; color: #888; line-height: 1; }
+  .close-cart:hover { color: #111; }
+  .cart-items { padding: 24px; overflow-y: auto; flex: 1; }
+  .cart-item { display: flex; gap: 16px; padding: 16px; border-bottom: 1px solid #f0f0f0; align-items: center; }
+  .cart-item img { width: 80px; height: 80px; object-fit: contain; }
+  .cart-item-info { flex: 1; }
+  .cart-item-name { font-weight: 600; font-size: 16px; margin-bottom: 4px; }
+  .cart-item-price { color: #484848; font-size: 14px; }
+  .remove-item { background: #fff; border: 1px solid #ccc; padding: 6px 12px; cursor: pointer; font-size: 12px; }
+  .remove-item:hover { background: #f0f0f0; }
+  .cart-empty { text-align: center; padding: 60px 20px; color: #888; }
+  .cart-footer { padding: 24px; border-top: 2px solid #e5e5e5; background: #fafafa; }
+  .cart-subtotal { display: flex; justify-content: space-between; font-size: 16px; margin-bottom: 16px; }
+  .checkout-btn { background-color: #0058a3; color: white; border: none; padding: 16px; font-size: 16px; font-weight: bold; cursor: pointer; border-radius: 50px; width: 100%; }
+  .checkout-btn:hover { background-color: #004f93; }
+  .checkout-btn:disabled { background-color: #ccc; cursor: not-allowed; }
+  
+  /* Payment Page */
+  .payment-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 3500; overflow-y: auto; }
+  .payment-container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+  .payment-header { text-align: center; margin-bottom: 40px; }
+  .payment-header h1 { font-size: 32px; margin: 0; }
+  .payment-section { background: #f9f9f9; padding: 30px; border-radius: 4px; margin-bottom: 30px; }
+  .payment-section h2 { font-size: 20px; margin: 0 0 20px; color: #0058a3; }
+  .order-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e5e5e5; }
+  .order-item:last-child { border-bottom: none; }
+  .fee-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 14px; }
+  .fee-row.total { font-size: 20px; font-weight: 700; border-top: 2px solid #0058a3; padding-top: 16px; margin-top: 16px; }
+  .fee-row.subtotal { font-weight: 600; margin-top: 10px; padding-top: 10px; border-top: 1px solid #ddd; }
+  .complete-payment-btn { background-color: #0058a3; color: white; border: none; padding: 20px; font-size: 18px; font-weight: bold; cursor: pointer; border-radius: 50px; width: 100%; margin-top: 30px; }
+  .complete-payment-btn:hover { background-color: #004f93; }
   
   .main-container { max-width: 1200px; margin: 40px auto; display: flex; gap: 60px; padding: 0 20px; }
   .product-image-section { flex: 1.5; text-align: center; }
@@ -33,7 +85,7 @@
   /* --- INTRUSIVE UPSELL UI --- */
   .upsell-overlay {
     display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.8); z-index: 2000; align-items: center; justify-content: center;
+    background: rgba(0,0,0,0); z-index: 3000; align-items: center; justify-content: center;
   }
   
   .upsell-card {
@@ -49,7 +101,7 @@
 
   .upsell-card h3 { 
     margin: 0; font-size: 20px; color: #0058a3; min-height: 60px; display: flex; align-items: center; justify-content: center;
-    user-select: none; /* Prevents text highlighting on accidental double clicks */
+    user-select: none;
   }
 
   .upsell-card img { width: 100%; height: 220px; object-fit: contain; margin: 10px 0; user-select: none; -webkit-user-drag: none; }
@@ -78,7 +130,6 @@
   .tile { width: 124px; height: 124px; position: relative; background: #eee; box-sizing: border-box; }
   .tile.selected { box-shadow: inset 0 0 0 6px #4A90E2; }
 
-  /* PREVENT SELECTION AND DRAGGING ON BATS AND GHOSTS */
   .flying-bat { 
     position: absolute; width: 100px; height: 100px; z-index: 10; cursor: pointer; 
     animation: chaoticFly 3s infinite ease-in-out; 
@@ -100,7 +151,120 @@
 </head>
 <body>
 
-<header><a href="#" class="ikea-logo">IKEA</a></header>
+<header>
+  <a href="#" class="ikea-logo">IKEA</a>
+  <div class="cart-icon-container" onclick="toggleCart()">
+    <span class="cart-icon">🛒</span>
+    <span class="cart-count" id="cart-count">0</span>
+  </div>
+</header>
+
+<!-- Notification Container -->
+<div class="notification-container" id="notification-container"></div>
+
+<!-- Shopping Cart Overlay -->
+<div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+
+<!-- Shopping Cart Sidebar -->
+<div class="cart-sidebar" id="cart-sidebar">
+  <div class="cart-header">
+    <h2>Shopping Cart</h2>
+    <span class="close-cart" onclick="closeCart()">×</span>
+  </div>
+  <div class="cart-items" id="cart-items">
+    <div class="cart-empty">Your cart is empty</div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-subtotal">
+      <span>Subtotal:</span>
+      <span id="cart-subtotal">$0.00</span>
+    </div>
+    <button class="checkout-btn" id="checkout-btn" onclick="checkout()" disabled>Proceed to Checkout</button>
+  </div>
+</div>
+
+<!-- Payment Page -->
+<div class="payment-page" id="payment-page">
+  <div class="payment-container">
+    <div class="payment-header">
+      <h1>Complete Your Order</h1>
+    </div>
+    
+    <div class="payment-section">
+      <h2>Order Summary</h2>
+      <div id="order-items"></div>
+      
+      <div style="margin-top: 30px;">
+        <div class="fee-row subtotal">
+          <span>Subtotal</span>
+          <span id="payment-subtotal">$0.00</span>
+        </div>
+        <div class="fee-row">
+          <span>GST (15%)</span>
+          <span id="gst-fee">$0.00</span>
+        </div>
+        <div class="fee-row">
+          <span>Delivery Fee</span>
+          <span>$7.99</span>
+        </div>
+        <div class="fee-row">
+          <span>Service Fee</span>
+          <span>$2.99</span>
+        </div>
+        <div class="fee-row">
+          <span>Processing Fee</span>
+          <span>$4.50</span>
+        </div>
+        <div class="fee-row">
+          <span>Convenience Fee</span>
+          <span>$3.75</span>
+        </div>
+        <div class="fee-row">
+          <span>Handling Fee</span>
+          <span>$2.25</span>
+        </div>
+        <div class="fee-row">
+          <span>Environmental Fee</span>
+          <span>$1.99</span>
+        </div>
+        <div class="fee-row">
+          <span>Fuel Surcharge</span>
+          <span>$5.50</span>
+        </div>
+        <div class="fee-row">
+          <span>Carbon Offset Fee</span>
+          <span>$2.10</span>
+        </div>
+        <div class="fee-row">
+          <span>Packaging Fee</span>
+          <span>$1.85</span>
+        </div>
+        <div class="fee-row">
+          <span>Insurance Fee</span>
+          <span>$3.99</span>
+        </div>
+        <div class="fee-row">
+          <span>"Small Order" Fee</span>
+          <span>$6.99</span>
+        </div>
+        <div class="fee-row">
+          <span>Weekend Delivery Surcharge</span>
+          <span>$8.50</span>
+        </div>
+        <div class="fee-row">
+          <span>Remote Area Fee</span>
+          <span>$12.00</span>
+        </div>
+        <div class="fee-row total">
+          <span>Total</span>
+          <span id="payment-total">$0.00</span>
+        </div>
+      </div>
+    </div>
+    
+    <button class="complete-payment-btn" onclick="completePayment()">Complete Payment</button>
+  </div>
+</div>
 
 <div class="main-container">
   <div class="product-image-section">
@@ -116,7 +280,7 @@
     <h1>BLÅHAJ</h1>
     <h2>Soft toy, shark, 100 cm</h2>
     <div class="price"><span>$</span>39.00</div>
-    <button id="main-buy-btn" class="buy-btn" onclick="handleBuyClick()">Add to shopping bag</button>
+    <button id="main-buy-btn" class="buy-btn" onclick="handleBuyClick()">Add to shopping cart</button>
     <div id="oos-status"></div>
     <p class="shark-desc"><i>is big blue friend. Have much soft and no bone, only stuffing for hug. Do not the shark, just love he.</i></p>
   </div>
@@ -151,6 +315,8 @@
   let messageIndex = 0;
   let batIndices = [];
   let isLocked = false;
+  let cart = [];
+  let upsellsCompleted = false;
   
   const staticAnchor = "https://raw.githubusercontent.com/Sevastipol/badui/refs/heads/main/newCaptchaAnchor.png";
   const animatedGif = "https://mashby.com/wp-content/uploads/2018/01/hero-recaptcha-demo.gif";
@@ -158,18 +324,141 @@
   const ghostGif = "https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyZzVuM2h0dnBib3owMnVpMG1qYjdoZnhtaTB3ZHo2N2lybjFoNDk4cSZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/xhZyIrYIRJbBhTs1nI/200.gif";
 
   const upsellData = [
-    { name: "DJUNGELSKOG Bear", img: "https://www.ikea.com/nz/en/images/products/djungelskog-soft-toy-brown-bear__0710168_pe727370_s5.jpg?f=xl" },
-    { name: "DJUNGELSKOG Snake", img: "https://www.ikea.com/nz/en/images/products/djungelskog-glove-puppet-snake-burmese-python__0710178_pe727381_s5.jpg?f=xl" },
-    { name: "BLÅVINGAD Octopus", img: "https://www.ikea.com/nz/en/images/products/blavingad-soft-toy-octopus-yellow__1088894_pe861308_s5.jpg?f=xl" },
-    { name: "ÅRSTID Table Lamp", img: "https://www.ikea.com/nz/en/images/products/arstid-table-lamp-brass-white__0609329_pe684454_s5.jpg?f=xl" }
+    { name: "DJUNGELSKOG Bear", img: "https://www.ikea.com/nz/en/images/products/djungelskog-soft-toy-brown-bear__0710168_pe727370_s5.jpg?f=xl", price: 29.00 },
+    { name: "DJUNGELSKOG Snake", img: "https://www.ikea.com/nz/en/images/products/djungelskog-glove-puppet-snake-burmese-python__0710178_pe727381_s5.jpg?f=xl", price: 19.00 },
+    { name: "BLÅVINGAD Octopus", img: "https://www.ikea.com/nz/en/images/products/blavingad-soft-toy-octopus-yellow__1088894_pe861308_s5.jpg?f=xl", price: 24.00 },
+    { name: "ÅRSTID Table Lamp", img: "https://www.ikea.com/nz/en/images/products/arstid-table-lamp-brass-white__0609329_pe684454_s5.jpg?f=xl", price: 79.00 }
   ];
   let currentUpsellIndex = 0;
 
+  // Shopping Cart Functions
+  function updateCartCount() {
+    document.getElementById('cart-count').textContent = cart.length;
+  }
+
+  function updateCartDisplay() {
+    const cartItemsDiv = document.getElementById('cart-items');
+    const checkoutBtn = document.getElementById('checkout-btn');
+    
+    if (cart.length === 0) {
+      cartItemsDiv.innerHTML = '<div class="cart-empty">Your cart is empty</div>';
+      checkoutBtn.disabled = true;
+    } else {
+      cartItemsDiv.innerHTML = cart.map((item, index) => `
+        <div class="cart-item">
+          <img src="${item.img}" alt="${item.name}">
+          <div class="cart-item-info">
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-price">$${item.price.toFixed(2)}</div>
+          </div>
+          <button class="remove-item" onclick="removeFromCart(${index})">Remove</button>
+        </div>
+      `).join('');
+      checkoutBtn.disabled = false;
+    }
+    
+    const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+    document.getElementById('cart-subtotal').textContent = '$' + subtotal.toFixed(2);
+  }
+
+  function addToCart(item) {
+    cart.push(item);
+    updateCartCount();
+    updateCartDisplay();
+    showNotification(item.name + ' added to cart');
+  }
+
+  function removeFromCart(index) {
+    cart.splice(index, 1);
+    updateCartCount();
+    updateCartDisplay();
+  }
+
+  function toggleCart() {
+    const sidebar = document.getElementById('cart-sidebar');
+    const overlay = document.getElementById('cart-overlay');
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('show');
+  }
+
+  function openCart() {
+    document.getElementById('cart-sidebar').classList.add('open');
+    document.getElementById('cart-overlay').classList.add('show');
+  }
+
+  function closeCart() {
+    document.getElementById('cart-sidebar').classList.remove('open');
+    document.getElementById('cart-overlay').classList.remove('show');
+  }
+
+  function checkout() {
+    if (cart.length > 0) {
+      if (upsellsCompleted) {
+        showPaymentPage();
+      } else {
+        showUpsells();
+      }
+    }
+  }
+
+  function showPaymentPage() {
+    const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+    const gst = subtotal * 0.15;
+    const extraFees = 7.99 + 2.99 + 4.50 + 3.75 + 2.25 + 1.99 + 5.50 + 2.10 + 1.85 + 3.99 + 6.99 + 8.50 + 12.00;
+    const total = subtotal + gst + extraFees;
+    
+    // Populate order items
+    const orderItemsDiv = document.getElementById('order-items');
+    orderItemsDiv.innerHTML = cart.map(item => `
+      <div class="order-item">
+        <span>${item.name}</span>
+        <span>$${item.price.toFixed(2)}</span>
+      </div>
+    `).join('');
+    
+    document.getElementById('payment-subtotal').textContent = '$' + subtotal.toFixed(2);
+    document.getElementById('gst-fee').textContent = '$' + gst.toFixed(2);
+    document.getElementById('payment-total').textContent = '$' + total.toFixed(2);
+    
+    // Close cart before showing payment page
+    closeCart();
+    document.getElementById('payment-page').style.display = 'block';
+  }
+
+  function completePayment() {
+    alert('Payment successful! Thank you for your purchase!');
+    cart = [];
+    updateCartCount();
+    updateCartDisplay();
+    document.getElementById('payment-page').style.display = 'none';
+  }
+
+  function showNotification(text) {
+    const container = document.getElementById('notification-container');
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.innerHTML = `
+      <span class="check-icon">✓</span>
+      <span>${text}</span>
+    `;
+    container.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.classList.add('fade-out');
+      setTimeout(() => {
+        notification.remove();
+      }, 300);
+    }, 3000);
+  }
+
   function handleBuyClick() {
     if (document.getElementById('main-buy-btn').innerText === "OUT OF STOCK") {
-      outOfStock();
+      // Do nothing when out of stock
+      return;
     } else if (trueBuyAvailable) {
-      showUpsells();
+      // Add the shark to cart
+      addToCart({ name: "BLÅHAJ Shark", img: "https://www.ikea.com/nz/en/images/products/blahaj-soft-toy-shark__0710175_pe727378_s5.jpg", price: 39.00 });
+      openCart();
     } else {
       showCaptcha();
     }
@@ -188,17 +477,16 @@
   }
 
   function nextUpsell() {
+    const item = upsellData[currentUpsellIndex];
+    addToCart(item);
+    
     currentUpsellIndex++;
     if (currentUpsellIndex < upsellData.length) {
       updateUpsellContent();
     } else {
       document.getElementById('upsell-container').style.display = 'none';
-      document.getElementById('oos-status').innerText = "Order successful! YOU WIN!";
-      document.getElementById('oos-status').style.color = "green";
-      const b = document.getElementById('main-buy-btn');
-      b.disabled = true;
-      b.textContent = 'PURCHASED';
-      b.style.backgroundColor = '#008000';
+      upsellsCompleted = true;
+      // Don't automatically show payment page - let user click checkout again
     }
   }
 
@@ -209,18 +497,6 @@
       document.getElementById('recaptcha-anchor-box').style.display = 'block';
       document.getElementById('anchor-image').src = staticAnchor;
       document.getElementById('captcha-main-box').style.display = 'none';
-    }
-  }
-
-  function outOfStock() {
-    const messages = ["Out of stock. Sorry!", "Its out of stock bro", "OUT OF STOCK", "NO MORE SHARK", "Stop it!", "Last warning: Stop clicking."];
-    document.getElementById('oos-status').innerText = messages[messageIndex % messages.length];
-    messageIndex++;
-    if (messageIndex >= 8) {
-      document.getElementById('main-buy-btn').innerText = "Add to shopping bag";
-      document.getElementById('main-buy-btn').style.backgroundColor = "#0058a3";
-      document.getElementById('oos-status').innerText = "Fine, take it.";
-      trueBuyAvailable = true;
     }
   }
 
@@ -282,6 +558,13 @@
             document.getElementById('main-buy-btn').innerText = "OUT OF STOCK";
             document.getElementById('main-buy-btn').style.backgroundColor = "#888";
             closeCaptcha();
+            // Restore stock after 3.2 seconds
+            setTimeout(() => {
+              document.getElementById('main-buy-btn').innerText = "Add to shopping cart";
+              document.getElementById('main-buy-btn').style.backgroundColor = "#0058a3";
+              document.getElementById('oos-status').innerText = "";
+              trueBuyAvailable = true;
+            }, 3200);
         }, 3000);
       } else {
         document.getElementById('loader-overlay').style.display = 'none';
