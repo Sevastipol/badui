@@ -623,13 +623,13 @@
             document.getElementById('main-buy-btn').innerText = "OUT OF STOCK";
             document.getElementById('main-buy-btn').style.backgroundColor = "#888";
             closeCaptcha();
-            // Restore stock after 3.2 seconds
+            // Restore stock after 4 seconds for troll
             setTimeout(() => {
               document.getElementById('main-buy-btn').innerText = "Add to shopping cart";
               document.getElementById('main-buy-btn').style.backgroundColor = "#0058a3";
               document.getElementById('oos-status').innerText = "";
               trueBuyAvailable = true;
-            }, 3200);
+            }, 4000);
         }, 3000);
       } else {
         document.getElementById('loader-overlay').style.display = 'none';
