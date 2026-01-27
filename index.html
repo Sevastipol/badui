@@ -12,7 +12,7 @@
   
   /* Shopping Cart Icon */
   .cart-icon-container { position: relative; cursor: pointer; }
-  .cart-icon { font-size: 28px; }
+  .cart-icon { width: 32px; height: 32px; display: block; }
   .cart-count { position: absolute; top: -8px; right: -8px; background: #d93025; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; }
   
   /* Notification Toast */
@@ -154,18 +154,15 @@
 <header>
   <a href="#" class="ikea-logo">IKEA</a>
   <div class="cart-icon-container" onclick="toggleCart()">
-    <span class="cart-icon">🛒</span>
+    <img src="https://cdn-icons-png.flaticon.com/512/1413/1413908.png" class="cart-icon" alt="Cart">
     <span class="cart-count" id="cart-count">0</span>
   </div>
 </header>
 
-<!-- Notification Container -->
 <div class="notification-container" id="notification-container"></div>
 
-<!-- Shopping Cart Overlay -->
 <div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
 
-<!-- Shopping Cart Sidebar -->
 <div class="cart-sidebar" id="cart-sidebar">
   <div class="cart-header">
     <h2>Shopping Cart</h2>
@@ -183,7 +180,6 @@
   </div>
 </div>
 
-<!-- Payment Page -->
 <div class="payment-page" id="payment-page">
   <div class="payment-container">
     <div class="payment-header">
@@ -236,7 +232,7 @@
           <span>$2.10</span>
         </div>
         <div class="fee-row">
-          <span>Packaging Fee</span>
+          <span>Eco-friendly Packaging Fee</span>
           <span>$1.85</span>
         </div>
         <div class="fee-row">
@@ -244,15 +240,15 @@
           <span>$3.99</span>
         </div>
         <div class="fee-row">
-          <span>"Small Order" Fee</span>
+          <span>E-Commerce Fee</span>
           <span>$6.99</span>
         </div>
         <div class="fee-row">
-          <span>Weekend Delivery Surcharge</span>
+          <span>Production Fee</span>
           <span>$8.50</span>
         </div>
         <div class="fee-row">
-          <span>Remote Area Fee</span>
+          <span>Remote Area Delivery Fee</span>
           <span>$12.00</span>
         </div>
         <div class="fee-row total">
