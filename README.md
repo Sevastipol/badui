@@ -16,4 +16,6 @@ IN STOCK:
 ---------------------------
 Simply click **BUY** and the Blåhaj is yours! (you will have to decide if you want to buy some recomendations ofc)
 
+After that, click the button to proceed to checkout, and then click complete payment!
+Then the shark is yours.
 _Made by Sevastipol_
