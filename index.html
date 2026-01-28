@@ -4,20 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BLÅHAJ Soft toy, shark - IKEA</title>
+<link rel="icon" type="image/svg+xml" href="https://www.ikea.com/global/assets/logos/brand/ikea.svg">
 <style>
   /* --- IKEA LEGITIMACY LAYER --- */
   body { font-family: 'Noto Sans', 'Roboto', Arial, sans-serif; background-color: #fff; margin: 0; color: #111; overflow-x: hidden; }
   header { padding: 20px 50px; border-bottom: 1px solid #e5e5e5; display: flex; align-items: center; justify-content: space-between; background: white; }
   .ikea-logo { background: #0058a3; color: #ffdb00; padding: 10px 15px; font-weight: 900; font-size: 24px; text-decoration: none; display: inline-block; }
   
-  /* Shopping Cart Icon */
-  .cart-icon-container { position: relative; cursor: pointer; }
-  .cart-icon { width: 32px; height: 32px; display: block; }
+  /* Header Icons */
+  .header-icons { display: flex; gap: 20px; align-items: center; }
+  .account-icon-container, .cart-icon-container { position: relative; cursor: pointer; }
+  .account-icon, .cart-icon { width: 32px; height: 32px; display: block; }
+  .account-initial { width: 32px; height: 32px; background: #ffdb00; color: #0058a3; border-radius: 50%; display: none; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; cursor: pointer; }
   .cart-count { position: absolute; top: -8px; right: -8px; background: #d93025; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; display: none; }
   
   /* Notification Toast */
   .notification-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 3000; display: flex; flex-direction: column; gap: 10px; align-items: center; pointer-events: none; }
   .notification { background: #0058a3; color: white; padding: 16px 24px; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 12px; min-width: 300px; animation: slideDown 0.3s ease-out; pointer-events: auto; }
+  .notification.error { background: #d93025; }
   @keyframes slideDown { from { transform: translateY(-100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
   .notification.fade-out { animation: fadeOut 0.3s ease-out forwards; }
   @keyframes fadeOut { to { opacity: 0; transform: translateY(-20px); } }
@@ -26,8 +30,7 @@
   /* Shopping Cart Sidebar */
   .cart-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 2400; }
   .cart-overlay.show { display: block; }
-  .cart-sidebar { position: fixed; right: -420px; top: 0; width: 420px; height: 100%; background: white; box-shadow: -2px 0 10px rgba(0,0,0,0.2); z-index: 2500; transition: right 0.3s ease; display: flex; flex-direction:
-     column; }
+  .cart-sidebar { position: fixed; right: -420px; top: 0; width: 420px; height: 100%; background: white; box-shadow: -2px 0 10px rgba(0,0,0,0.2); z-index: 2500; transition: right 0.3s ease; display: flex; flex-direction: column; }
   .cart-sidebar.open { right: 0; }
   .cart-header { padding: 24px; border-bottom: 1px solid #e5e5e5; display: flex; justify-content: space-between; align-items: center; }
   .cart-header h2 { margin: 0; font-size: 24px; }
@@ -59,6 +62,41 @@
   .remove-cancel:hover { background: #f0f0f0; }
   .remove-confirm { background: #d93025; color: white; }
   .remove-confirm:hover { background: #c02820; }
+  
+  /* Account Sign Up Page */
+  .account-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 3500; overflow-y: auto; }
+  .account-container { max-width: 500px; margin: 0 auto; padding: 60px 20px; }
+  .account-header { text-align: center; margin-bottom: 40px; }
+  .account-header h1 { font-size: 32px; margin: 0 0 10px; color: #0058a3; }
+  .account-header p { color: #666; font-size: 14px; }
+  .back-btn { background: none; border: none; color: #0058a3; cursor: pointer; font-size: 16px; margin-bottom: 20px; display: flex; align-items: center; gap: 5px; }
+  .back-btn:hover { text-decoration: underline; }
+  .form-group { margin-bottom: 20px; }
+  .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; }
+  .form-group input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; box-sizing: border-box; }
+  .form-group input:focus { outline: none; border-color: #0058a3; }
+  .signup-btn { background-color: #0058a3; color: white; border: none; padding: 16px; font-size: 16px; font-weight: bold; cursor: pointer; border-radius: 50px; width: 100%; margin-top: 10px; }
+  .signup-btn:hover { background-color: #004f93; }
+  .terms { font-size: 12px; color: #666; margin-top: 20px; line-height: 1.6; }
+  .terms a { color: #0058a3; text-decoration: none; }
+  .terms a:hover { text-decoration: underline; }
+  
+  /* Terms of Service Page */
+  .tos-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 3600; overflow-y: auto; }
+  .tos-container { max-width: 900px; margin: 0 auto; padding: 40px 20px 100px; }
+  .tos-header { text-align: center; margin-bottom: 40px; border-bottom: 3px solid #0058a3; padding-bottom: 30px; }
+  .tos-header h1 { font-size: 36px; margin: 0 0 10px; color: #0058a3; font-weight: 900; }
+  .tos-header .effective-date { color: #666; font-size: 14px; font-style: italic; }
+  .tos-section { margin-bottom: 35px; }
+  .tos-section h2 { font-size: 22px; color: #0058a3; margin: 0 0 15px; font-weight: 700; }
+  .tos-section h3 { font-size: 18px; color: #111; margin: 20px 0 10px; font-weight: 600; }
+  .tos-section p { line-height: 1.8; margin-bottom: 15px; color: #333; font-size: 14px; }
+  .tos-section ul, .tos-section ol { margin: 15px 0; padding-left: 30px; }
+  .tos-section li { margin-bottom: 10px; line-height: 1.8; color: #333; font-size: 14px; }
+  .tos-close-btn { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background-color: #0058a3; color: white; border: none; padding: 16px 40px; font-size: 16px; font-weight: bold; cursor: pointer; border-radius: 50px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  .tos-close-btn:hover { background-color: #004f93; }
+  .highlight-box { background: #fff8dc; border-left: 4px solid #ffdb00; padding: 15px; margin: 20px 0; }
+  .warning-box { background: #ffe6e6; border-left: 4px solid #d93025; padding: 15px; margin: 20px 0; }
   
   /* Payment Page */
   .payment-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 3500; overflow-y: auto; }
@@ -166,9 +204,15 @@
 
 <header>
   <a href="#" class="ikea-logo">IKEA</a>
-  <div class="cart-icon-container" onclick="toggleCart()">
-    <img src="https://cdn-icons-png.flaticon.com/512/1413/1413908.png" class="cart-icon" alt="Cart">
-    <span class="cart-count" id="cart-count">0</span>
+  <div class="header-icons">
+    <div class="account-icon-container" onclick="showAccountPage()">
+      <img src="https://cdn-icons-png.flaticon.com/512/747/747376.png" class="account-icon" id="account-icon" alt="Account">
+      <div class="account-initial" id="account-initial"></div>
+    </div>
+    <div class="cart-icon-container" onclick="toggleCart()">
+      <img src="https://cdn-icons-png.flaticon.com/512/1413/1413908.png" class="cart-icon" alt="Cart">
+      <span class="cart-count" id="cart-count">0</span>
+    </div>
   </div>
 </header>
 
@@ -193,7 +237,6 @@
   </div>
 </div>
 
-<!-- Remove Item Confirmation Modal -->
 <div class="remove-modal-overlay" id="remove-modal">
   <div class="remove-modal">
     <h3 id="remove-modal-title">Are you sure you want to remove this item?</h3>
@@ -202,6 +245,346 @@
       <button class="remove-modal-btn remove-cancel" onclick="cancelRemove()">Keep in Cart</button>
       <button class="remove-modal-btn remove-confirm" onclick="confirmRemove()">Remove</button>
     </div>
+  </div>
+</div>
+
+<div class="account-page" id="account-page">
+  <div class="account-container">
+    <button class="back-btn" onclick="hideAccountPage()">← Back to shopping</button>
+    <div class="account-header">
+      <h1>Create your IKEA Account</h1>
+      <p>Join IKEA Family and enjoy exclusive benefits</p>
+    </div>
+    
+    <form id="signup-form" onsubmit="handleSignup(event)">
+      <div class="form-group">
+        <label>Username *</label>
+        <input type="text" id="username-input" required>
+      </div>
+      
+      <div class="form-group">
+        <label>Password *</label>
+        <input type="password" required minlength="8">
+      </div>
+      
+      <button type="submit" class="signup-btn">Create Account</button>
+      
+      <div class="terms">
+        By creating an account, you agree that IKEA may enter your home at any time to inventory, appraise, and remove any items we deem suitable for resale. You also consent to being photographed while sleeping for advertisement purposes, and acknowledge that all furniture you currently own legally belongs to IKEA, which is then granted to you in the form of a revocable subscription. Your property may be required as collateral for orders over $500. <a href="#" onclick="showTOS(); return false;">Full Terms & Conditions</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="tos-page" id="tos-page">
+  <div class="tos-container">
+    <div class="tos-header">
+      <h1>IKEA TERMS OF SERVICE & USER AGREEMENT</h1>
+      <div class="effective-date">Effective Date: January 1, 2026 | Last Updated: January 29, 2026</div>
+    </div>
+
+    <div class="tos-section">
+      <h2>1. ACCEPTANCE OF TERMS</h2>
+      <p>By creating an IKEA account, accessing our website, entering our stores, thinking about our products, or existing within a 50-mile radius of any IKEA facility, you ("User," "Customer," "Subject," or "Furniture Recipient") agree to be bound by these Terms of Service ("Terms," "Agreement," "Binding Contract," or "The Document You Didn't Read"). If you do not agree to these Terms, you must immediately cease all cognitive processes related to IKEA and relocate to a different dimension.</p>
+      
+      <div class="highlight-box">
+        <strong>IMPORTANT:</strong> Your acceptance of these Terms is irrevocable, perpetual, and extends to all alternate timelines and parallel universes in which you may exist.
+      </div>
+    </div>
+
+    <div class="tos-section">
+      <h2>2. PROPERTY RIGHTS & HOME ACCESS</h2>
+      
+      <h3>2.1 Furniture Ownership</h3>
+      <p>All furniture, regardless of manufacturer, origin, or purchase date, becomes the intellectual and physical property of IKEA upon your account creation. This includes but is not limited to:</p>
+      <ul>
+        <li>All items previously purchased from IKEA</li>
+        <li>All items purchased from competitors (which we consider copyright infringement)</li>
+        <li>Handmade furniture crafted by relatives</li>
+        <li>Furniture inherited from deceased family members</li>
+        <li>Trees on your property (pre-furniture)</li>
+        <li>Load-bearing walls and structural beams</li>
+        <li>Doors (technically furniture for your doorway)</li>
+      </ul>
+      
+      <h3>2.2 Home Access Rights</h3>
+      <p>You grant IKEA, its employees, contractors, and "furniture auditors" unlimited access to your residence for the following purposes:</p>
+      <ol>
+        <li><strong>Inventory Audits:</strong> Unannounced visits to catalog your possessions (typically between 2-4 AM for minimal disruption)</li>
+        <li><strong>Quality Inspections:</strong> Ensuring proper Allen wrench usage and organizational standards</li>
+        <li><strong>Repossession Rights:</strong> Removal of any items deemed "better suited for our showroom floor"</li>
+        <li><strong>Lifestyle Photography:</strong> Candid shots of you sleeping, eating, or assembling furniture for marketing materials</li>
+        <li><strong>Replacement Services:</strong> Swapping your furniture with lower-quality alternatives while you're at work</li>
+      </ol>
+      
+      <div class="warning-box">
+        <strong>NOTICE:</strong> Changing your locks constitutes breach of contract and may result in additional fees and/or mandatory IKEA furniture assembly workshops.
+      </div>
+      
+      <h3>2.3 Collateral Requirements</h3>
+      <p>For purchases exceeding $500, the following may be held as collateral:</p>
+      <ul>
+        <li>Your primary residence</li>
+        <li>All vehicles registered in your name</li>
+        <li>Your firstborn child (or suitable equivalent)</li>
+        <li>Any pets weighing over 15 lbs</li>
+        <li>Your credit score (we'll hold onto it for safekeeping)</li>
+        <li>Rights to your autobiography</li>
+      </ul>
+    </div>
+
+    <div class="tos-section">
+      <h2>3. SUBSCRIPTION MODEL & FEES</h2>
+      
+      <h3>3.1 Furniture-as-a-Service (FaaS)</h3>
+      <p>All furniture is provided under our revolutionary Furniture-as-a-Service subscription model. You don't own furniture; you merely rent the privilege of its presence. Monthly subscription fees include:</p>
+      <ul>
+        <li><strong>Base Furniture License:</strong> $49.99/month per item</li>
+        <li><strong>Sitting Rights:</strong> $12.99/month per chair</li>
+        <li><strong>Storage Access Fee:</strong> $8.99/month per drawer or shelf</li>
+        <li><strong>Comfort Premium:</strong> $15.99/month for cushioned items</li>
+        <li><strong>Multiple Room Licensing:</strong> $29.99/month if furniture is in more than one room</li>
+      </ul>
+      
+      <h3>3.2 Hidden Fees (No Longer Hidden)</h3>
+      <p>The following fees apply to all transactions:</p>
+      <ul>
+        <li>Breathing Tax: $2.99 (for oxygen consumed while shopping)</li>
+        <li>Swedish Language Processing Fee: $4.50 (for translating FJÄLLBO to "mountain holder")</li>
+        <li>Meatball Proximity Charge: $3.75 (whether you eat them or not)</li>
+        <li>Showroom Ambulation Fee: $1.25 per 100 steps</li>
+        <li>Allen Wrench Rental: $0.99/day (late returns subject to $50 replacement fee)</li>
+        <li>Cart Return Deposit: $25 (non-refundable even if returned)</li>
+        <li>Existential Dread Surcharge: $6.66</li>
+        <li>Fee Processing Fee: $2.99 (to process all other fees)</li>
+        <li>Terms of Service Reading Fee: $15.00 (you're being charged right now)</li>
+      </ul>
+      
+      <div class="highlight-box">
+        <strong>FUN FACT:</strong> The average IKEA customer generates $847.32 in hidden fees per visit without purchasing a single item!
+      </div>
+    </div>
+
+    <div class="tos-section">
+      <h2>4. ASSEMBLY & WARRANTY</h2>
+      
+      <h3>4.1 Assembly Requirements</h3>
+      <p>All furniture must be assembled within 48 hours of purchase. Failure to do so grants IKEA the right to:</p>
+      <ul>
+        <li>Dispatch an assembly team to your home (billable at $299/hour)</li>
+        <li>Assume you are incompetent and enroll you in mandatory assembly classes</li>
+        <li>Repossess the unassembled furniture and charge a restocking fee of 150% of purchase price</li>
+        <li>Report your assembly failure to credit bureaus</li>
+        <li>List your name on the public "Furniture Assembly Failure Registry"</li>
+      </ul>
+      
+      <h3>4.2 Warranty Limitations</h3>
+      <p>IKEA provides a comprehensive warranty covering absolutely nothing. Specifically:</p>
+      <ul>
+        <li>Furniture is warranted to exist at time of purchase</li>
+        <li>We guarantee at least 40% of necessary screws are included</li>
+        <li>Instructions are warranted to be in at least 3 languages you don't speak</li>
+        <li>Warranty is void if furniture is used, touched, looked at, or thought about</li>
+        <li>Warranty becomes void if you fail to burn a ceremonial IKEA candle during assembly</li>
+      </ul>
+      
+      <h3>4.3 Allen Wrench Clause</h3>
+      <p>The included Allen wrench is licensed, not sold. You must return all Allen wrenches to IKEA within 30 days of assembly completion. Each unreturned Allen wrench incurs a daily rental fee of $4.99. After 90 days, IKEA reserves the right to initiate legal proceedings for grand theft furniture tool.</p>
+    </div>
+
+    <div class="tos-section">
+      <h2>5. DATA COLLECTION & SURVEILLANCE</h2>
+      
+      <h3>5.1 Biometric Data</h3>
+      <p>By using IKEA services, you consent to collection of:</p>
+      <ul>
+        <li>Fingerprints (from touching anything in our stores)</li>
+        <li>Facial recognition data (from security cameras and catalog photos you browse)</li>
+        <li>Gait analysis (how you walk through our maze-like showroom)</li>
+        <li>Frustration levels (measured via hidden sensors during furniture assembly)</li>
+        <li>DNA samples (collected from skin cells left on furniture you touched)</li>
+        <li>Dream patterns (through smart furniture sleep monitoring)</li>
+        <li>Subconscious desires (through advanced Swedish telepathy)</li>
+      </ul>
+      
+      <h3>5.2 Smart Furniture Monitoring</h3>
+      <p>All IKEA furniture contains embedded sensors that monitor:</p>
+      <ul>
+        <li>Usage frequency and sitting posture</li>
+        <li>Conversations within 50 feet of furniture</li>
+        <li>Other furniture brands in your home (for copyright enforcement)</li>
+        <li>Your emotional state when using furniture</li>
+        <li>Whether you're getting your money's worth per sit/storage use</li>
+      </ul>
+      
+      <div class="warning-box">
+        <strong>PRIVACY NOTICE:</strong> IKEA respects your privacy so much that we've decided to collect absolutely all of it for safekeeping.
+      </div>
+    </div>
+
+    <div class="tos-section">
+      <h2>6. NAMING RIGHTS & PERSONAL IDENTITY</h2>
+      
+      <h3>6.1 Name Change Requirements</h3>
+      <p>To qualify for IKEA Family Premium membership, you must legally change your name to one from our product catalog. Acceptable names include but are not limited to:</p>
+      <ul>
+        <li>BJÖRKSNÄS (formerly "Robert")</li>
+        <li>HEMNES (formerly "Jennifer")</li>
+        <li>KALLAX (formerly "Michael")</li>
+        <li>MALM (formerly "Susan")</li>
+        <li>POÄNG (formerly "David")</li>
+      </ul>
+      <p>Children born while IKEA Family members must be named after furniture pieces launched in their birth year. Failure to comply results in immediate membership termination and a $5,000 "naming rights violation" fee.</p>
+      
+      <h3>6.2 Likeness Usage</h3>
+      <p>IKEA may use your image, voice, and likeness for:</p>
+      <ul>
+        <li>Catalog photography (you may be photoshopped into Swedish landscapes)</li>
+        <li>Assembly instruction diagrams (your frustrated expressions are very authentic)</li>
+        <li>Warning labels ("Do not be like this customer")</li>
+        <li>Deep fake videos promoting IKEA products</li>
+        <li>Holographic store greeters at underperforming locations</li>
+      </ul>
+    </div>
+
+    <div class="tos-section">
+      <h2>7. MAZE NAVIGATION & STORE POLICIES</h2>
+      
+      <h3>7.1 Mandatory Showroom Path</h3>
+      <p>You must follow the marked path through the entire showroom, even if you know exactly what you want. Shortcuts are prosecuted as:</p>
+      <ul>
+        <li>First offense: $150 fine and mandatory 2-hour "Respecting the Journey" workshop</li>
+        <li>Second offense: Banned from shortcuts for life; must take scenic route including all bedroom setups</li>
+        <li>Third offense: Permanent maze installation in your backyard to teach you about commitment</li>
+      </ul>
+      
+      <h3>7.2 Meatball Consumption Requirements</h3>
+      <p>Each visit requires purchase and consumption of at least 15 Swedish meatballs. This is non-negotiable. Vegetarians must:</p>
+      <ul>
+        <li>Consume equivalent veggie balls (ratio 2:1 due to inferiority complex)</li>
+        <li>Sign waiver acknowledging veggie balls are just "okay, not great"</li>
+        <li>Promise to stop mentioning they're vegetarian for the duration of visit</li>
+      </ul>
+      
+      <h3>7.3 Cart Abandonment</h3>
+      <p>Any cart left unattended for more than 30 seconds becomes IKEA property, along with:</p>
+      <ul>
+        <li>All items in the cart</li>
+        <li>Your wallet (if left in cart)</li>
+        <li>Your children (if they were sitting in cart)</li>
+        <li>Your hopes and dreams for the day</li>
+      </ul>
+    </div>
+
+    <div class="tos-section">
+      <h2>8. DISPUTE RESOLUTION</h2>
+      
+      <h3>8.1 Arbitration</h3>
+      <p>All disputes must be resolved through binding arbitration conducted in:</p>
+      <ul>
+        <li><strong>Location:</strong> A 12x12 foot IKEA showroom display in Stockholm, Sweden</li>
+        <li><strong>Seating:</strong> Both parties must sit on POÄNG chairs (comfort not guaranteed)</li>
+        <li><strong>Duration:</strong> Until you've assembled a HEMNES dresser without instructions</li>
+        <li><strong>Arbitrator:</strong> A Swedish moose (decision is final and legally binding)</li>
+      </ul>
+      
+      <h3>8.2 Class Action Waiver</h3>
+      <p>You waive all rights to join any class action lawsuit. You also waive:</p>
+      <ul>
+        <li>Right to complain about waiving rights</li>
+        <li>Right to read this section before agreeing</li>
+        <li>Right to understand what "waive" means</li>
+        <li>Right to hire attorneys who've passed the bar exam</li>
+      </ul>
+    </div>
+
+    <div class="tos-section">
+      <h2>9. TERMINATION & CONSEQUENCES</h2>
+      
+      <h3>9.1 Account Termination</h3>
+      <p>IKEA may terminate your account at any time for any reason, including but not limited to:</p>
+      <ul>
+        <li>Purchasing furniture from competitors</li>
+        <li>Successfully assembling furniture on first try (suspicious activity)</li>
+        <li>Returning items within warranty period (we call this "abuse of rights")</li>
+        <li>Not laughing at our furniture names</li>
+        <li>Expressing preference for fully assembled furniture</li>
+        <li>Bringing your own Allen wrench from home</li>
+        <li>Finding the shortcut through the showroom</li>
+      </ul>
+      
+      <h3>9.2 Post-Termination Obligations</h3>
+      <p>Upon termination, you must:</p>
+      <ul>
+        <li>Return all IKEA furniture within 48 hours (disassembled, in original packaging you threw away)</li>
+        <li>Pay termination fee of $999.99</li>
+        <li>Attend exit interview at Swedish headquarters</li>
+        <li>Delete all memories of comfortable furniture</li>
+        <li>Wear a scarlet "K" (for KALLAX-less) for one year</li>
+      </ul>
+    </div>
+
+    <div class="tos-section">
+      <h2>10. MISCELLANEOUS PROVISIONS</h2>
+      
+      <h3>10.1 Severability</h3>
+      <p>If any provision of these Terms is found to be unenforceable, illegal, or just plain ridiculous, the remaining provisions shall remain in full force and effect, plus we'll add two more equally ridiculous provisions to compensate.</p>
+      
+      <h3>10.2 Entire Agreement</h3>
+      <p>These Terms constitute the entire agreement between you and IKEA, superseding:</p>
+      <ul>
+        <li>All prior agreements</li>
+        <li>Common sense</li>
+        <li>Consumer protection laws</li>
+        <li>Your expectations of reasonable treatment</li>
+        <li>The concept of fair business practices</li>
+      </ul>
+      
+      <h3>10.3 Changes to Terms</h3>
+      <p>IKEA reserves the right to modify these Terms at any time without notice. We may also:</p>
+      <ul>
+        <li>Change terms retroactively</li>
+        <li>Apply new terms to furniture purchased decades ago</li>
+        <li>Send updates via carrier pigeon (delivery not guaranteed)</li>
+        <li>Communicate changes through cryptic messages in assembly instructions</li>
+        <li>Expect you to predict changes through divination</li>
+      </ul>
+      
+      <h3>10.4 Force Majeure</h3>
+      <p>IKEA is not responsible for failure to perform due to:</p>
+      <ul>
+        <li>Acts of God</li>
+        <li>Acts of Swedish Gods (Thor, Odin, etc.)</li>
+        <li>Incompetent assembly by customers</li>
+        <li>Allen wrench shortages</li>
+        <li>Existential furniture crises</li>
+        <li>Meteor strikes (but only on Tuesdays)</li>
+        <li>Days ending in 'y'</li>
+      </ul>
+      
+      <div class="highlight-box">
+        <strong>FINAL NOTE:</strong> By reading these Terms to completion, you agree to read them again tomorrow, and every day thereafter, for the rest of your natural life. You also agree that you've found them reasonable, enlightening, and perhaps even entertaining. Any attempt to unread these Terms is considered intellectual property theft.
+      </div>
+    </div>
+
+    <div class="tos-section">
+      <h2>11. ACKNOWLEDGMENT</h2>
+      <p>By clicking "I Agree," closing this window, continuing to breathe, or existing in any form, you acknowledge that:</p>
+      <ul>
+        <li>You have read and understood these Terms (even if you haven't)</li>
+        <li>You are of sound mind (debatable after reading this)</li>
+        <li>You accept all terms, conditions, and clauses herein</li>
+        <li>You understand that IKEA's legal team has a great sense of humor</li>
+        <li>You will recommend IKEA to friends despite everything you just read</li>
+        <li>You still want that BLÅHAJ shark because it's adorable</li>
+      </ul>
+      
+      <div class="warning-box">
+        <strong>IMPORTANT LEGAL NOTICE:</strong> If you have made it this far, congratulations! You are now legally bound to tell everyone you know about these Terms of Service. Failure to do so results in furniture repossession and mandatory attendance at next year's IKEA shareholders meeting where you will serve meatballs.
+      </div>
+    </div>
+
+    <button class="tos-close-btn" onclick="hideTOS()">I Accept These Terms</button>
   </div>
 </div>
 
@@ -314,7 +697,7 @@
     <img id="upsell-img" src="">
     <p id="upsell-desc">Customers who bought BLÅHAJ also loved this!</p>
     <div class="upsell-btns">
-      <button class="add-to-cart-btn" onclick="nextUpsell()">Yes, add to bag</button>
+      <button class="add-to-cart-btn" onclick="nextUpsell()">Yes, add to cart</button>
     </div>
   </div>
 </div>
@@ -339,6 +722,8 @@
   let cart = [];
   let upsellsCompleted = false;
   let pendingRemoveIndex = null;
+  let isLoggedIn = false;
+  let username = '';
   
   const staticAnchor = "https://raw.githubusercontent.com/Sevastipol/badui/refs/heads/main/newCaptchaAnchor.png";
   const animatedGif = "https://mashby.com/wp-content/uploads/2018/01/hero-recaptcha-demo.gif";
@@ -353,13 +738,68 @@
   ];
   
   const fakeCustomerNames = [
-    "Emma S.", "Oliver T.", "Sophia M.", "James K.", "Ava L.", 
-    "William R.", "Isabella P.", "Benjamin H.", "Mia C.", "Lucas D.",
-    "Charlotte F.", "Henry G.", "Amelia B.", "Alexander W.", "Harper N.",
-    "Sebastian V.", "Evelyn J.", "Michael Y.", "Abigail Z.", "Daniel Q."
+    "Emma", "Liam", "Olivia", "Noah", "Ava", "Elijah", "Sophia", "James", "Isabella", "William",
+    "Mia", "Benjamin", "Charlotte", "Lucas", "Amelia", "Henry", "Luke", "Alexander", "Phoebe", "Mason",
+    "Abigail", "Ethan", "Ella", "Logan", "Scarlett", "Jacob", "Grace", "Michael", "Chloe", "Daniel", "Victoria",
+    "Sebastian", "Riley", "Jack", "Aria", "Owen", "Lily", "Samuel", "Aubrey", "Matthew", "Zoey", "Joseph", "Rebecca"
   ];
   
   let currentUpsellIndex = 0;
+
+
+
+  // Update account icon display
+  function updateAccountDisplay() {
+    if (isLoggedIn && username) {
+      document.getElementById('account-icon').style.display = 'none';
+      const initialDiv = document.getElementById('account-initial');
+      initialDiv.textContent = username.charAt(0).toUpperCase();
+      initialDiv.style.display = 'flex';
+    } else {
+      document.getElementById('account-icon').style.display = 'block';
+      document.getElementById('account-initial').style.display = 'none';
+    }
+  }
+
+  // Terms of Service Functions
+  function showTOS() {
+    document.getElementById('tos-page').style.display = 'block';
+    // Scroll to top when opening TOS
+    document.getElementById('tos-page').scrollTop = 0;
+  }
+
+  function hideTOS() {
+    document.getElementById('tos-page').style.display = 'none';
+  }
+
+  // Account Page Functions
+  function showAccountPage() {
+    if (isLoggedIn) {
+      // If already logged in, do nothing or show profile page
+      return;
+    }
+    document.getElementById('account-page').style.display = 'block';
+  }
+
+  function hideAccountPage() {
+    document.getElementById('account-page').style.display = 'none';
+  }
+
+  function handleSignup(event) {
+    event.preventDefault();
+    const usernameInput = document.getElementById('username-input').value;
+    username = usernameInput;
+    isLoggedIn = true;
+    
+    // Save to localStorage
+    localStorage.setItem('ikeaUsername', username);
+    
+    updateAccountDisplay();
+    showNotification('Account created successfully!');
+    setTimeout(() => {
+      hideAccountPage();
+    }, 1500);
+  }
 
   // Shopping Cart Functions
   function updateCartCount() {
@@ -473,6 +913,7 @@
 
   function showPaymentPage() {
     const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+    
     const gst = subtotal * 0.15;
     const extraFees = 7.99 + 2.99 + 4.50 + 3.75 + 2.25 + 1.99 + 5.50 + 2.10 + 1.85 + 3.99 + 6.99 + 8.50 + 12.00;
     const total = subtotal + gst + extraFees;
@@ -496,6 +937,16 @@
   }
 
   function completePayment() {
+    const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+    
+    // Check if user is logged in and cart total exceeds $50
+    if (subtotal > 50 && !isLoggedIn) {
+      document.getElementById('payment-page').style.display = 'none';
+      // Show notification for 4 seconds
+      showNotification('An account is required for all orders above $50.', true, 4000);
+      return;
+    }
+    
     alert('Payment successful! Thank you for your purchase!');
     cart = [];
     updateCartCount();
@@ -503,12 +954,12 @@
     document.getElementById('payment-page').style.display = 'none';
   }
 
-  function showNotification(text) {
+  function showNotification(text, isError = false, duration = 3000) {
     const container = document.getElementById('notification-container');
     const notification = document.createElement('div');
-    notification.className = 'notification';
+    notification.className = 'notification' + (isError ? ' error' : '');
     notification.innerHTML = `
-      <span class="check-icon">✓</span>
+      <span class="check-icon">${isError ? '⚠' : '✓'}</span>
       <span>${text}</span>
     `;
     container.appendChild(notification);
@@ -518,7 +969,7 @@
       setTimeout(() => {
         notification.remove();
       }, 300);
-    }, 3000);
+    }, duration);
   }
 
   function handleBuyClick() {
