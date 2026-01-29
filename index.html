@@ -162,13 +162,20 @@
 
   /* --- CAPTCHA STYLES --- */
   #captcha-wrapper { display: none; flex-direction: column; align-items: center; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(1.3); z-index: 1000; user-select: none; }
+  #account-captcha-wrapper { display: none; flex-direction: column; align-items: center; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(1.3); z-index: 4000; user-select: none; }
   #recaptcha-anchor-box { width: 300px; height: 74px; background: #fff; border: 1px solid #d3d3d3; border-radius: 3px; cursor: pointer; overflow: hidden; }
+  #account-anchor-box { width: 300px; height: 74px; background: #fff; border: 1px solid #d3d3d3; border-radius: 3px; cursor: pointer; overflow: hidden; }
   #anchor-image { width: 100%; height: 100%; object-fit: contain; -webkit-user-drag: none; }
+  #account-anchor-image { width: 100%; height: 100%; object-fit: contain; -webkit-user-drag: none; }
   #page-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; }
+  #account-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 3999; }
   #status-text { color: #d93025; font-size: 14px; margin-bottom: 8px; font-weight: 500; height: 18px; text-align: center; width: 380px; }
+  #account-status-text { color: #d93025; font-size: 14px; margin-bottom: 8px; font-weight: 500; height: 18px; text-align: center; width: 380px; }
   .captcha-container { display: none; width: 380px; background: white; padding: 8px; box-shadow: 0 0 12px rgba(0,0,0,0.2); border: 1px solid #ccc; position: relative; }
+  .reference-image { width: 100%; max-width: 200px; margin: 10px auto; display: block; border: 2px solid #4A90E2; border-radius: 4px; }
   
   #loader-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.95); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 100; }
+  #account-loader-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.95); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 100; }
   .spinner { width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid #4A90E2; border-radius: 50%; animation: spin 1s linear infinite; }
   @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   
@@ -179,7 +186,9 @@
   .grid-wrapper { width: 380px; height: 380px; overflow: hidden; position: relative; background: #ccc; }
   .grid { display: grid; grid-template-columns: repeat(3, 124px); grid-template-rows: repeat(3, 124px); gap: 4px; }
   .tile { width: 124px; height: 124px; position: relative; background: #eee; box-sizing: border-box; }
-  .tile.selected { box-shadow: inset 0 0 0 6px #4A90E2; }
+  .tile.selected::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; box-shadow: inset 0 0 0 6px #4A90E2; pointer-events: none; z-index: 10; }
+  #accountGrid .tile { cursor: pointer; }
+  #accountGrid .tile img { width: 100%; height: 100%; object-fit: cover; user-select: none; -webkit-user-drag: none; pointer-events: none; }
 
   .flying-bat { 
     position: absolute; width: 100px; height: 100px; z-index: 10; cursor: pointer; 
@@ -666,6 +675,10 @@
       </div>
     </div>
     
+    <div style="text-align: center; margin-top: 20px; font-size: 12px; color: #666;">
+      By placing an order, you agree to our <a href="#" onclick="showTOS(); return false;" style="color: #0058a3; text-decoration: none;">Terms and Conditions</a>
+    </div>
+    
     <button class="complete-payment-btn" onclick="completePayment()">Complete Payment</button>
   </div>
 </div>
@@ -702,6 +715,22 @@
   </div>
 </div>
 
+<div id="account-overlay" onclick="closeAccountCaptcha()"></div>
+<div id="account-captcha-wrapper">
+  <div id="account-anchor-box" onclick="playAccountGifAndContinue()"><img id="account-anchor-image" src="https://raw.githubusercontent.com/Sevastipol/badui/refs/heads/main/newCaptchaAnchor.png"></div>
+  <div id="account-status-text"></div>
+  <div class="captcha-container" id="account-captcha-main-box">
+    <div id="account-loader-overlay"><div class="spinner"></div><p style="color: #4A90E2; font-weight: bold; margin-top: 10px;">Verifying...</p></div>
+    <div class="header">
+      <h2>Select all squares with</h2>
+      <h1>DAUCUS CAROTA</h1>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/9/98/Daucus_carota0.jpg" class="reference-image" alt="Reference: Daucus carota">
+    </div>
+    <div class="grid-wrapper"><div class="grid" id="accountGrid"></div></div>
+    <div class="footer"><div class="icons">🔄 🎧 ℹ️</div><button class="verify-btn" onclick="checkAccountAnswer()">VERIFY</button></div>
+  </div>
+</div>
+
 <div id="page-overlay" onclick="closeCaptcha()"></div>
 <div id="captcha-wrapper">
   <div id="recaptcha-anchor-box" onclick="playGifAndContinue()"><img id="anchor-image" src="https://raw.githubusercontent.com/Sevastipol/badui/refs/heads/main/newCaptchaAnchor.png"></div>
@@ -718,17 +747,44 @@
   let trueBuyAvailable = false; 
   let messageIndex = 0;
   let batIndices = [];
+  let carrotIndices = [];
   let isLocked = false;
+  let accountCaptchaLocked = false;
   let cart = [];
   let upsellsCompleted = false;
   let pendingRemoveIndex = null;
   let isLoggedIn = false;
   let username = '';
+  let pendingUsername = '';
+  let pendingPassword = '';
   
   const staticAnchor = "https://raw.githubusercontent.com/Sevastipol/badui/refs/heads/main/newCaptchaAnchor.png";
   const animatedGif = "https://mashby.com/wp-content/uploads/2018/01/hero-recaptcha-demo.gif";
   const batGif = "https://gifgifs.com/animations/holidays/halloween/bats_ani.gif";
   const ghostGif = "https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyZzVuM2h0dnBib3owMnVpMG1qYjdoZnhtaTB3ZHo2N2lybjFoNDk4cSZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/xhZyIrYIRJbBhTs1nI/200.gif";
+
+  const carrotImages = [
+    "https://www.wildflowersofireland.net/image_uploads/flowers/Carrot-Wild-1.jpg",
+    "https://www.wildfooduk.com/wp-content/uploads/2018/01/guido-1.jpg",
+    "https://bugwomanlondon.com/wp-content/uploads/2016/08/14612829613_9f20e376a3_o.jpg",
+    "https://www.kew.org/sites/default/files/styles/plant_image_953w/public/2021-07/Wild%20Carrot%20-%20Peter%20O%27Connor.jpg.webp?itok=TEHcrUN6",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-HYmtswWRZ0say9mfIp56WWeAISZIkiIU3g&s",
+    "https://weeds.org.au/wp-content/uploads/2024/07/Daucus-carota.jpg",
+    "https://www.bostonseeds.com/media/cache/gallery/images/uploads/item/KP%20Wild%20Carrot%202.webp"
+  ];
+
+  const incorrectPlantImages = [
+    "https://www.gardenia.net/wp-content/uploads/2024/11/shutterstock_2397495089.jpg",
+    "https://live.staticflickr.com/3929/32785679354_5a4fef8566_b.jpg",
+    "https://media.istockphoto.com/id/1327523882/photo/closeup-detail-of-flowers-of-conium-maculatum-aka-poison-hemlock.jpg?s=612x612&w=0&k=20&c=Pn3j22_tVkrIxeUuF5FAnhsChFULn4-wva6QsozVvac=",
+    "https://www.southernliving.com/thmb/t4CDcQzE1dJvfCt2VTHt3yRoCNc=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/valentine-bouquet-gettyimages-55949391-2000-d675e30abd0243f1bf1d13ecb212d45b.jpg",
+    "https://images.squarespace-cdn.com/content/v1/59cb502e1f318dc50f160957/bfd407a4-fb7c-4661-bf41-b253bbf0886c/agpanthus-lily-of-the-nile.png",
+    "https://springhillnursery.com/cdn/shop/files/05067.webp?v=1699446426&width=533",
+    "https://www.theenglishgarden.co.uk/_gatsby/file/ba090511572ca9c41d9fc8afe11cb58b/Passionflowers.png",
+    "https://images.finegardening.com/app/uploads/2018/01/23144407/helianthusannuus_mg_2_lg-main-500x500.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/4/4f/DandelionFlower.jpg",
+    "https://tualatinswcd.org/wp-content/uploads/2022/07/WildRadishFlowers02Small_IPMImages.png"
+  ];
 
   const upsellData = [
     { name: "DJUNGELSKOG Bear", img: "https://www.ikea.com/nz/en/images/products/djungelskog-soft-toy-brown-bear__0710168_pe727370_s5.jpg?f=xl", price: 29.00, isUpsell: true },
@@ -745,6 +801,18 @@
   ];
   
   let currentUpsellIndex = 0;
+
+  // Preload all CAPTCHA images
+  function preloadImages() {
+    const allImages = [...carrotImages, ...incorrectPlantImages];
+    allImages.forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
+  }
+
+  // Preload on page load
+  window.addEventListener('load', preloadImages);
 
 
 
@@ -787,18 +855,11 @@
 
   function handleSignup(event) {
     event.preventDefault();
-    const usernameInput = document.getElementById('username-input').value;
-    username = usernameInput;
-    isLoggedIn = true;
+    pendingUsername = document.getElementById('username-input').value;
+    pendingPassword = event.target.querySelector('input[type="password"]').value;
     
-    // Save to localStorage
-    localStorage.setItem('ikeaUsername', username);
-    
-    updateAccountDisplay();
-    showNotification('Account created successfully!');
-    setTimeout(() => {
-      hideAccountPage();
-    }, 1500);
+    // Show account CAPTCHA
+    showAccountCaptcha();
   }
 
   // Shopping Cart Functions
@@ -1097,6 +1158,96 @@
       }
     }, 1500);
   }
+
+  // Account CAPTCHA Functions
+  function showAccountCaptcha() {
+    if (!accountCaptchaLocked) {
+      document.getElementById('account-captcha-wrapper').style.display = 'flex';
+      document.getElementById('account-overlay').style.display = 'block';
+      document.getElementById('account-anchor-box').style.display = 'block';
+      document.getElementById('account-anchor-image').src = staticAnchor;
+      document.getElementById('account-captcha-main-box').style.display = 'none';
+    }
+  }
+
+  function closeAccountCaptcha() {
+    document.getElementById('account-captcha-wrapper').style.display = 'none';
+    document.getElementById('account-overlay').style.display = 'none';
+    accountCaptchaLocked = false;
+  }
+
+  function playAccountGifAndContinue() {
+    if(accountCaptchaLocked) return;
+    accountCaptchaLocked = true;
+    document.getElementById('account-anchor-image').src = animatedGif + "?t=" + new Date().getTime();
+    setTimeout(() => {
+        document.getElementById('account-anchor-box').style.display = 'none';
+        document.getElementById('account-captcha-main-box').style.display = 'block';
+        buildAccountGrid();
+    }, 3600);
+  }
+
+  function buildAccountGrid() {
+    document.getElementById('account-loader-overlay').style.display = 'none';
+    const g = document.getElementById('accountGrid');
+    g.innerHTML = '';
+    carrotIndices = [];
+    
+    // Shuffle and select images
+    const allImages = [...carrotImages, ...incorrectPlantImages];
+    const shuffled = allImages.sort(() => 0.5 - Math.random());
+    const selectedImages = shuffled.slice(0, 9);
+    
+    for (let i = 0; i < 9; i++) {
+      const imgUrl = selectedImages[i];
+      const isCarrot = carrotImages.includes(imgUrl);
+      if (isCarrot) carrotIndices.push(i);
+      
+      const tile = document.createElement('div');
+      tile.className = 'tile';
+      tile.onclick = () => tile.classList.toggle('selected');
+      
+      const img = document.createElement('img');
+      img.src = imgUrl;
+      tile.appendChild(img);
+      
+      g.appendChild(tile);
+    }
+  }
+
+  function checkAccountAnswer() {
+    document.getElementById('account-loader-overlay').style.display = 'flex';
+    setTimeout(() => {
+      const tiles = document.querySelectorAll('#accountGrid .tile');
+      let isCorrect = true;
+      tiles.forEach((tile, index) => {
+        if (tile.classList.contains('selected') !== carrotIndices.includes(index)) isCorrect = false;
+      });
+      
+      if (isCorrect && carrotIndices.length > 0) {
+        // CAPTCHA passed - create account
+        username = pendingUsername;
+        isLoggedIn = true;
+        localStorage.setItem('ikeaUsername', username);
+        
+        document.getElementById('account-loader-overlay').style.display = 'none';
+        closeAccountCaptcha();
+        updateAccountDisplay();
+        showNotification('Account created successfully!');
+        setTimeout(() => {
+          hideAccountPage();
+        }, 1500);
+      } else {
+        document.getElementById('account-loader-overlay').style.display = 'none';
+        document.getElementById('account-status-text').innerText = "Please try again.";
+        setTimeout(() => {
+            document.getElementById('account-status-text').innerText = "";
+        }, 3000);
+        buildAccountGrid();
+      }
+    }, 1500);
+  }
+
 </script>
 
 </body>
