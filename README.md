@@ -24,3 +24,4 @@ The shark is now yours.
 
 _Made by Sevastipol_
 
+(Demo: https://sevastipol.github.io/badui/)
