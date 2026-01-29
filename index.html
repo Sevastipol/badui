@@ -999,9 +999,10 @@
     const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
     
     // Check if user is logged in and cart total exceeds $50
-    if (subtotal > 50 && !isLoggedIn) {
+    if (!isLoggedIn) {
       document.getElementById('payment-page').style.display = 'none';
       // Show notification for 4 seconds
+      // Forced account creation due to not being based on subtotal
       showNotification('An account is required for all orders above $50.', true, 4000);
       return;
     }
