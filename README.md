@@ -9,14 +9,17 @@ Once you've selected the bats, click submit.
 
 WHEN SOLVED:
 ---------------------------
- If you've correctly done this, the item will go out of stock just as you solve the captcha. You then need to keep clicking the Blåhaj button,
-and keep clicking the button until new Blåhajs come into stock. 
+ If you've correctly done this, the item will go out of stock just as you solve the captcha. You will then need to wait a few seconds for the Blåhajs to be restocked.
 
 IN STOCK:
 ---------------------------
-Simply click **BUY** and the Blåhaj is yours! (you will have to decide if you want to buy some recomendations ofc)
+Click on the icon next to the shopping cart, on the left. Then, input a username and a password of atleast 8 characters.
+You will have to verify you are a human by completing another captcha. If you are stuck, ensure you are not selecting a look-alike and if you need to, search "wild carrot" on google.
+Once you have finished the captcha, your account will be created.
 
-After that, click the button to proceed to checkout, and then click complete payment!
+Simply click **Add to shopping cart** and the Blåhaj is yours! (you will have to decide if you want to buy some recomendations ofc)
+
+After that, click the button to proceed to checkout, then click complete payment!
 The shark is now yours.
 
 _Made by Sevastipol_
