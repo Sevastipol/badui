@@ -14,7 +14,7 @@ WHEN SOLVED:
 IN STOCK:
 ---------------------------
 Click on the icon next to the shopping cart, on the left. Then, input a username and a password of atleast 8 characters.
-You will have to verify you are a human by completing another captcha. If you are stuck, ensure you are not selecting a look-alike and if you need to, search "wild carrot" on google.
+You will have to verify you are a human by completing another captcha. If you are stuck, ensure you are selecting a white flower with a coloured dot in the middle.
 Once you have finished the captcha, your account will be created.
 
 Simply click **Add to shopping cart** and the Blåhaj is yours! (you will have to decide if you want to buy some recomendations ofc)
