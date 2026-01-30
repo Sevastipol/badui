@@ -761,27 +761,44 @@
   const batGif = "https://gifgifs.com/animations/holidays/halloween/bats_ani.gif";
   const ghostGif = "https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyZzVuM2h0dnBib3owMnVpMG1qYjdoZnhtaTB3ZHo2N2lybjFoNDk4cSZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/xhZyIrYIRJbBhTs1nI/200.gif";
 
-  const carrotImages = [
-    "https://www.wildflowersofireland.net/image_uploads/flowers/Carrot-Wild-1.jpg",
-    "https://www.wildfooduk.com/wp-content/uploads/2018/01/guido-1.jpg",
-    "https://bugwomanlondon.com/wp-content/uploads/2016/08/14612829613_9f20e376a3_o.jpg",
+  const wildCarrotImages = [
+    "https://www.bostonseeds.com/media/cache/gallery/images/uploads/item/KP%20Wild%20Carrot%202.webp",
     "https://www.kew.org/sites/default/files/styles/plant_image_953w/public/2021-07/Wild%20Carrot%20-%20Peter%20O%27Connor.jpg.webp?itok=TEHcrUN6",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-HYmtswWRZ0say9mfIp56WWeAISZIkiIU3g&s",
-    "https://weeds.org.au/wp-content/uploads/2024/07/Daucus-carota.jpg",
-    "https://www.bostonseeds.com/media/cache/gallery/images/uploads/item/KP%20Wild%20Carrot%202.webp"
+    "https://bugwomanlondon.com/wp-content/uploads/2016/08/14612829613_9f20e376a3_o.jpg",
+    "https://www.wildfooduk.com/wp-content/uploads/2018/01/guido-1.jpg",
+    "https://cdn.prod.website-files.com/657086f1977b131c30bb8131/65f5c6b8cb7c20addf3dcc18_close%20up%20of%20wild%20carrot%20flowers.jpg",
+    "https://media.vtecostudies.org/wp-content/uploads/2021/11/08184630/mike_qal-786x528.jpeg",
+    "https://www.plant-lore.com/wp-content/uploads/2011/09/2014-05-30-12.12.41.jpg",
+    "https://beefriendly-earth.de/assets/images/e/wild-carrot-5380856_1280-9467a185.jpg"
   ];
 
-  const incorrectPlantImages = [
+  const lookalikeImages = [
+    "https://upload.wikimedia.org/wikipedia/commons/8/86/AngelicaSylvestrisInflorescence.jpg",
+    "https://newfs.s3.amazonaws.com/taxon-images-1000s1000/Apiaceae/aegopodium-podagraria-fl-ahaines-c.jpg",
+    "https://cdn.britannica.com/15/118615-050-9EF89393/Giant-hogweed-phytophotodermatitis-sap-skin-sun-blindness.jpg",
     "https://www.gardenia.net/wp-content/uploads/2024/11/shutterstock_2397495089.jpg",
+    "https://lcinvasives.org/wp-content/uploads/2013/04/poisonhemlock.jpg",
     "https://live.staticflickr.com/3929/32785679354_5a4fef8566_b.jpg",
-    "https://media.istockphoto.com/id/1327523882/photo/closeup-detail-of-flowers-of-conium-maculatum-aka-poison-hemlock.jpg?s=612x612&w=0&k=20&c=Pn3j22_tVkrIxeUuF5FAnhsChFULn4-wva6QsozVvac=",
-    "https://www.southernliving.com/thmb/t4CDcQzE1dJvfCt2VTHt3yRoCNc=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/valentine-bouquet-gettyimages-55949391-2000-d675e30abd0243f1bf1d13ecb212d45b.jpg",
-    "https://images.squarespace-cdn.com/content/v1/59cb502e1f318dc50f160957/bfd407a4-fb7c-4661-bf41-b253bbf0886c/agpanthus-lily-of-the-nile.png",
-    "https://springhillnursery.com/cdn/shop/files/05067.webp?v=1699446426&width=533",
-    "https://www.theenglishgarden.co.uk/_gatsby/file/ba090511572ca9c41d9fc8afe11cb58b/Passionflowers.png",
-    "https://images.finegardening.com/app/uploads/2018/01/23144407/helianthusannuus_mg_2_lg-main-500x500.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/4/4f/DandelionFlower.jpg",
-    "https://tualatinswcd.org/wp-content/uploads/2022/07/WildRadishFlowers02Small_IPMImages.png"
+    "https://streamline.imgix.net/d43158c3-8264-417a-8025-bc86b97fecc1/4d1cf791-997f-45f3-ad3d-36ef91e6873a/poison%20hemlock%202.jpg?ixlib=rb-1.1.0&w=2000&h=2000&fit=max&or=0&s=285e5ed15045dddd4bd84949fb5063cc",
+    "https://florapittsburghensis.files.wordpress.com/2010/06/conium-maculatum-2010-06-14-beechview-01.jpg",
+    "https://www.missouriplants.com/images/Conium_maculatum_inflorescence2.jpg"
+  ];
+
+  const otherPlantImages = [
+    "https://www.treehugger.com/thmb/GP14-LiflRtGNiZZpdS327XprLQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/2-a2cf394afdbb41a4a7927ec0fb61eae8.jpg",
+    "https://seedball.co.uk/wp-content/uploads/2019/04/seedball_seedling_guide_Red-campion-3.jpg",
+    "https://www.bushgear.co.uk/cdn/shop/articles/Wild_ROse.jpg?v=1496653252&width=2048",
+    "https://www.treehugger.com/thmb/pAEiTDBsKKuz_kZEk_Vtr2OnlXs=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/3-6fedf942811f42a88050fc3e6ee14b1d.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/e/e5/OQ_Passion_flower.jpg",
+    "https://www.myperfectgarden.eu/wp-content/themes/theme/inc/dwl-file.php?get_image=https://files.plytix.com/api/v1.1/rn/public_files/pim/assets/42/1a/77/5f/5f771a42758cab15f10cfaf8/images/da/54/3f/60/603f54dab7900c7a8f70de49/IMG_4758_vierkant.jpg/PACAERUL15_6.jpg?s=700x",
+    "https://i.etsystatic.com/6728015/r/il/13a369/436276522/il_1080xN.436276522_d112.jpg",
+    "https://images.squarespace-cdn.com/content/v1/59cb502e1f318dc50f160957/1582579869308-EVA7GHIGKEA95TDGW504/pansy-flower.jpg",
+    "https://www.gardendesign.com/pictures/images/675x529Max/site_3/helianthus-yellow-flower-pixabay_11863.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/3/39/Bachelor%27s_button%2C_Basket_flower%2C_Boutonniere_flower%2C_Cornflower_-_3.jpg",
+    "https://i.pinimg.com/736x/4d/50/6c/4d506c5825262993e40e57ba1837cf28.jpg",
+    "https://www.hoselink.com.au/cdn/shop/articles/blue_hydrangea.jpg?v=1643922916",
+    "https://tualatinswcd.org/wp-content/uploads/2022/07/WildRadishFlowers02Small_IPMImages.png",
+    "https://images.squarespace-cdn.com/content/v1/659e7ec5bf381311256941fb/710132da-0322-4ca4-8639-8570ea8ef7ba/field-scabious-5370206_1280.jpg"
   ];
 
   const upsellData = [
@@ -802,7 +819,7 @@
 
   // Preload all CAPTCHA images
   function preloadImages() {
-    const allImages = [...carrotImages, ...incorrectPlantImages];
+    const allImages = [...wildCarrotImages, ...lookalikeImages, ...otherPlantImages];
     allImages.forEach(src => {
       const img = new Image();
       img.src = src;
@@ -1078,6 +1095,8 @@
       document.getElementById('recaptcha-anchor-box').style.display = 'block';
       document.getElementById('anchor-image').src = staticAnchor;
       document.getElementById('captcha-main-box').style.display = 'none';
+      // BUGFIX: Reset isLocked to false when showing captcha
+      isLocked = false;
     }
   }
 
@@ -1127,7 +1146,7 @@
   function checkAnswer() {
     document.getElementById('loader-overlay').style.display = 'flex';
     setTimeout(() => {
-      const tiles = document.querySelectorAll('.tile');
+      const tiles = document.querySelectorAll('#mainGrid .tile');
       let isCorrect = true;
       tiles.forEach((tile, index) => {
         if (tile.classList.contains('selected') !== batIndices.includes(index)) isCorrect = false;
@@ -1166,6 +1185,8 @@
       document.getElementById('account-anchor-box').style.display = 'block';
       document.getElementById('account-anchor-image').src = staticAnchor;
       document.getElementById('account-captcha-main-box').style.display = 'none';
+      // BUGFIX: Reset accountCaptchaLocked to false when showing captcha
+      accountCaptchaLocked = false;
     }
   }
 
@@ -1192,14 +1213,29 @@
     g.innerHTML = '';
     carrotIndices = [];
     
-    // Shuffle and select images
-    const allImages = [...carrotImages, ...incorrectPlantImages];
-    const shuffled = allImages.sort(() => 0.5 - Math.random());
-    const selectedImages = shuffled.slice(0, 9);
+    // Select images with proper distribution:
+    // 2-3 wild carrots, 1-2 lookalikes, rest are other plants
+    const numCarrots = Math.floor(Math.random() * 2) + 2; // 2 or 3
+    const numLookalikes = Math.floor(Math.random() * 2) + 1; // 1 or 2
+    const numOthers = 9 - numCarrots - numLookalikes;
+    
+    // Shuffle each category
+    const shuffledCarrots = [...wildCarrotImages].sort(() => 0.5 - Math.random());
+    const shuffledLookalikes = [...lookalikeImages].sort(() => 0.5 - Math.random());
+    const shuffledOthers = [...otherPlantImages].sort(() => 0.5 - Math.random());
+    
+    // Select from each category
+    const selectedCarrots = shuffledCarrots.slice(0, numCarrots);
+    const selectedLookalikes = shuffledLookalikes.slice(0, numLookalikes);
+    const selectedOthers = shuffledOthers.slice(0, numOthers);
+    
+    // Combine and shuffle all selected images
+    const allSelected = [...selectedCarrots, ...selectedLookalikes, ...selectedOthers];
+    const selectedImages = allSelected.sort(() => 0.5 - Math.random());
     
     for (let i = 0; i < 9; i++) {
       const imgUrl = selectedImages[i];
-      const isCarrot = carrotImages.includes(imgUrl);
+      const isCarrot = wildCarrotImages.includes(imgUrl);
       if (isCarrot) carrotIndices.push(i);
       
       const tile = document.createElement('div');
