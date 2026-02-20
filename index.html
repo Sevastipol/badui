@@ -9,7 +9,7 @@
   /* --- IKEA LEGITIMACY LAYER --- */
   body { font-family: 'Noto Sans', 'Roboto', Arial, sans-serif; background-color: #fff; margin: 0; color: #111; overflow-x: hidden; }
   header { padding: 20px 50px; border-bottom: 1px solid #e5e5e5; display: flex; align-items: center; justify-content: space-between; background: white; }
-  .ikea-logo { background: #0058a3; color: #ffdb00; padding: 10px 15px; font-weight: 900; font-size: 24px; text-decoration: none; display: inline-block; }
+  .ikea-logo { background: #0058a3; padding: 8px 12px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
   
   /* Header Icons */
   .header-icons { display: flex; gap: 20px; align-items: center; }
@@ -253,7 +253,7 @@
 <body>
 
 <header>
-  <a href="#" class="ikea-logo">IKEA</a>
+  <a href="#" class="ikea-logo" aria-label="IKEA Home"><img src="https://www.ikea.com/global/assets/logos/brand/ikea.svg" alt="IKEA" style="height:32px;width:auto;display:block;"></a>
   <div class="header-icons">
     <div class="account-icon-container" onclick="showAccountPage()" aria-label="Account" role="button" tabindex="0">
       <svg id="account-icon" class="account-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
