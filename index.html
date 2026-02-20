@@ -206,6 +206,48 @@
   .footer { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-top: 1px solid #eee; margin-top: 5px;}
   .icons { color: #777; font-size: 22px; letter-spacing: 5px; }
   .verify-btn { background-color: #4A90E2; color: white; border: none; padding: 12px 24px; font-weight: bold; cursor: pointer; font-size: 14px; }
+
+  /* --- MOBILE RESPONSIVE --- */
+  @media (max-width: 768px) {
+    header { padding: 16px 20px; }
+
+    .main-container { flex-direction: column; gap: 30px; margin: 20px auto; padding: 0 16px; }
+    .product-image-section { flex: none; }
+    .product-image-section img.main-shark { max-width: 320px; }
+    .placeholder-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+
+    .product-details h1 { font-size: 26px; }
+    .price { font-size: 24px; }
+
+    .cart-sidebar { width: 100%; right: -100%; }
+    .cart-sidebar.open { right: 0; }
+
+    .remove-modal { width: 90%; max-width: 420px; padding: 24px; }
+
+    .payment-container { padding: 24px 16px; }
+    .payment-section { padding: 20px 16px; }
+
+    .account-container { padding: 40px 16px; }
+
+    /* Captcha: remove scale transform on small screens, just center it */
+    #captcha-wrapper, #account-captcha-wrapper {
+      transform: translate(-50%, -50%) scale(1);
+      width: 90vw;
+      max-width: 380px;
+    }
+    #recaptcha-anchor-box, #account-anchor-box { width: 100%; }
+    #status-text, #account-status-text { width: 100%; }
+    .captcha-container { width: 100%; }
+    .grid-wrapper { width: 100%; height: auto; }
+    .grid { grid-template-columns: repeat(3, 1fr); grid-template-rows: auto; }
+    .tile { width: 100%; height: 0; padding-bottom: 100%; position: relative; }
+    .tile img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+
+    .upsell-card { width: 90vw; max-width: 380px; }
+
+    .tos-container { padding: 24px 16px 100px; }
+    .tos-header h1 { font-size: 26px; }
+  }
 </style>
 </head>
 <body>
@@ -213,13 +255,13 @@
 <header>
   <a href="#" class="ikea-logo">IKEA</a>
   <div class="header-icons">
-    <div class="account-icon-container" onclick="showAccountPage()">
-      <img src="https://cdn-icons-png.flaticon.com/512/747/747376.png" class="account-icon" id="account-icon" alt="Account">
-      <div class="account-initial" id="account-initial"></div>
+    <div class="account-icon-container" onclick="showAccountPage()" aria-label="Account" role="button" tabindex="0">
+      <svg id="account-icon" class="account-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      <div class="account-initial" id="account-initial" aria-hidden="true"></div>
     </div>
-    <div class="cart-icon-container" onclick="toggleCart()">
+    <div class="cart-icon-container" onclick="toggleCart()" aria-label="Shopping cart" role="button" tabindex="0">
       <img src="https://cdn-icons-png.flaticon.com/512/1413/1413908.png" class="cart-icon" alt="Cart">
-      <span class="cart-count" id="cart-count">0</span>
+      <span class="cart-count" id="cart-count" aria-label="Cart items">0</span>
     </div>
   </div>
 </header>
@@ -816,6 +858,13 @@
   ];
   
   let currentUpsellIndex = 0;
+
+  // Keyboard accessibility for header icon buttons
+  document.querySelectorAll('.account-icon-container, .cart-icon-container').forEach(el => {
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
+    });
+  });
 
   // Preload all CAPTCHA images
   function preloadImages() {
