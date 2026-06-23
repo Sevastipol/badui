@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BLÅHAJ Soft toy, shark - IKEA</title>
-<link rel="icon" type="image/svg+xml" href="https://www.ikea.com/global/assets/logos/brand/ikea.svg">
+<link rel="icon" type="image/svg+xml" href="badui/ikea.svg">
 <style>
   /* --- IKEA LEGITIMACY LAYER --- */
   body { font-family: 'Noto Sans', 'Roboto', Arial, sans-serif; background-color: #fff; margin: 0; color: #111; overflow-x: hidden; }
@@ -253,14 +253,14 @@
 <body>
 
 <header>
-  <a href="#" class="ikea-logo" aria-label="IKEA Home"><img src="https://www.ikea.com/global/assets/logos/brand/ikea.svg" alt="IKEA" style="height:32px;width:auto;display:block;"></a>
+  <a href="#" class="ikea-logo" aria-label="IKEA Home"><img src="badui/ikea.svg" alt="IKEA" style="height:32px;width:auto;display:block;"></a>
   <div class="header-icons">
     <div class="account-icon-container" onclick="showAccountPage()" aria-label="Account" role="button" tabindex="0">
       <svg id="account-icon" class="account-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
       <div class="account-initial" id="account-initial" aria-hidden="true"></div>
     </div>
     <div class="cart-icon-container" onclick="toggleCart()" aria-label="Shopping cart" role="button" tabindex="0">
-      <img src="https://cdn-icons-png.flaticon.com/512/1413/1413908.png" class="cart-icon" alt="Cart">
+      <img src="badui/cart-icon.png" class="cart-icon" alt="Cart">
       <span class="cart-count" id="cart-count" aria-label="Cart items">0</span>
     </div>
   </div>
@@ -726,11 +726,11 @@
 
 <div class="main-container">
   <div class="product-image-section">
-    <img src="https://www.ikea.com/nz/en/images/products/blahaj-soft-toy-shark__0710175_pe727378_s5.jpg" alt="Shark" class="main-shark">
+    <img src="badui/blahaj-shark.jpg" alt="Shark" class="main-shark">
     <div class="placeholder-grid">
-      <div class="placeholder-item"><img src="https://m.media-amazon.com/images/I/71hs-euA1xL._AC_SL1000__.jpg" alt="Shark Friend 1"></div>
-      <div class="placeholder-item"><img src="https://www.ikea.com/nz/en/images/products/blahaj-soft-toy-baby-shark__0877393_pe730957_s5.jpg" alt="Shark Friend 2"></div>
-      <div class="placeholder-item"><img src="https://img.fruugo.com/product/4/63/591572634_max.jpg" alt="Shark Friend 3"></div>
+      <div class="placeholder-item"><img src="badui/shark-friend-1.jpg" alt="Shark Friend 1"></div>
+      <div class="placeholder-item"><img src="badui/shark-friend-2.jpg" alt="Shark Friend 2"></div>
+      <div class="placeholder-item"><img src="badui/shark-friend-3.jpg" alt="Shark Friend 3"></div>
     </div>
   </div>
   
@@ -758,7 +758,7 @@
 
 <div id="account-overlay" onclick="closeAccountCaptcha()"></div>
 <div id="account-captcha-wrapper">
-  <div id="account-anchor-box" onclick="playAccountGifAndContinue()"><img id="account-anchor-image" src="https://raw.githubusercontent.com/Sevastipol/badui/refs/heads/main/newCaptchaAnchor.png"></div>
+  <div id="account-anchor-box" onclick="playAccountGifAndContinue()"><img id="account-anchor-image" src="badui/newCaptchaAnchor.png"></div>
   <div id="account-status-text"></div>
   <div class="captcha-container" id="account-captcha-main-box">
     <div id="account-loader-overlay"><div class="spinner"></div><p style="color: #4A90E2; font-weight: bold; margin-top: 10px;">Verifying...</p></div>
@@ -773,7 +773,7 @@
 
 <div id="page-overlay" onclick="closeCaptcha()"></div>
 <div id="captcha-wrapper">
-  <div id="recaptcha-anchor-box" onclick="playGifAndContinue()"><img id="anchor-image" src="https://raw.githubusercontent.com/Sevastipol/badui/refs/heads/main/newCaptchaAnchor.png"></div>
+  <div id="recaptcha-anchor-box" onclick="playGifAndContinue()"><img id="anchor-image" src="badui/newCaptchaAnchor.png"></div>
   <div id="status-text"></div>
   <div class="captcha-container" id="captcha-main-box">
     <div id="loader-overlay"><div class="spinner"></div><p style="color: #4A90E2; font-weight: bold; margin-top: 10px;">Verifying...</p></div>
@@ -798,56 +798,56 @@
   let pendingUsername = '';
   let pendingPassword = '';
   
-  const staticAnchor = "https://raw.githubusercontent.com/Sevastipol/badui/refs/heads/main/newCaptchaAnchor.png";
-  const animatedGif = "https://mashby.com/wp-content/uploads/2018/01/hero-recaptcha-demo.gif";
-  const batGif = "bats.gif";
-  const ghostGif = "https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyZzVuM2h0dnBib3owMnVpMG1qYjdoZnhtaTB3ZHo2N2lybjFoNDk4cSZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/xhZyIrYIRJbBhTs1nI/200.gif";
+  const staticAnchor = "badui/newCaptchaAnchor.png";
+  const animatedGif = "badui/hero-recaptcha-demo.gif";
+  const batGif = "badui/bats.gif";
+  const ghostGif = "badui/ghost.gif";
 
   const wildCarrotImages = [
-    "https://www.kew.org/sites/default/files/styles/plant_image_953w/public/2021-07/Wild%20Carrot%20-%20Peter%20O%27Connor.jpg.webp?itok=TEHcrUN6",
-    "https://bugwomanlondon.com/wp-content/uploads/2016/08/14612829613_9f20e376a3_o.jpg",
-    "https://www.wildfooduk.com/wp-content/uploads/2018/01/guido-1.jpg",
-    "https://cdn.prod.website-files.com/657086f1977b131c30bb8131/65f5c6b8cb7c20addf3dcc18_close%20up%20of%20wild%20carrot%20flowers.jpg",
-    "https://media.vtecostudies.org/wp-content/uploads/2021/11/08184630/mike_qal-786x528.jpeg",
-    "https://www.plant-lore.com/wp-content/uploads/2011/09/2014-05-30-12.12.41.jpg",
-    "https://beefriendly-earth.de/assets/images/e/wild-carrot-5380856_1280-9467a185.jpg",
-    "https://inaturalist-open-data.s3.amazonaws.com/photos/311732517/large.jpeg"
+    "badui/wild-carrot-1.webp",
+    "badui/wild-carrot-2.jpg",
+    "badui/wild-carrot-3.jpg",
+    "badui/wild-carrot-4.jpg",
+    "badui/wild-carrot-5.jpeg",
+    "badui/wild-carrot-6.jpg",
+    "badui/wild-carrot-7.jpg",
+    "badui/wild-carrot-8.jpeg"
   ];
 
   const lookalikeImages = [
-    "https://upload.wikimedia.org/wikipedia/commons/8/86/AngelicaSylvestrisInflorescence.jpg",
-    "https://newfs.s3.amazonaws.com/taxon-images-1000s1000/Apiaceae/aegopodium-podagraria-fl-ahaines-c.jpg",
-    "https://cdn.britannica.com/15/118615-050-9EF89393/Giant-hogweed-phytophotodermatitis-sap-skin-sun-blindness.jpg",
-    "https://www.gardenia.net/wp-content/uploads/2024/11/shutterstock_2397495089.jpg",
-    "https://lcinvasives.org/wp-content/uploads/2013/04/poisonhemlock.jpg",
-    "https://live.staticflickr.com/3929/32785679354_5a4fef8566_b.jpg",
-    "https://streamline.imgix.net/d43158c3-8264-417a-8025-bc86b97fecc1/4d1cf791-997f-45f3-ad3d-36ef91e6873a/poison%20hemlock%202.jpg?ixlib=rb-1.1.0&w=2000&h=2000&fit=max&or=0&s=285e5ed15045dddd4bd84949fb5063cc",
-    "https://florapittsburghensis.files.wordpress.com/2010/06/conium-maculatum-2010-06-14-beechview-01.jpg",
-    "https://www.missouriplants.com/images/Conium_maculatum_inflorescence2.jpg"
+    "badui/lookalike-1.jpg",
+    "badui/lookalike-2.jpg",
+    "badui/lookalike-3.jpg",
+    "badui/lookalike-4.jpg",
+    "badui/lookalike-5.jpg",
+    "badui/lookalike-6.jpg",
+    "badui/lookalike-7.jpg",
+    "badui/lookalike-8.jpg",
+    "badui/lookalike-9.jpg"
   ];
 
   const otherPlantImages = [
-    "https://www.treehugger.com/thmb/GP14-LiflRtGNiZZpdS327XprLQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/2-a2cf394afdbb41a4a7927ec0fb61eae8.jpg",
-    "https://seedball.co.uk/wp-content/uploads/2019/04/seedball_seedling_guide_Red-campion-3.jpg",
-    "https://www.bushgear.co.uk/cdn/shop/articles/Wild_ROse.jpg?v=1496653252&width=2048",
-    "https://www.treehugger.com/thmb/pAEiTDBsKKuz_kZEk_Vtr2OnlXs=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/3-6fedf942811f42a88050fc3e6ee14b1d.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/e/e5/OQ_Passion_flower.jpg",
-    "https://www.myperfectgarden.eu/wp-content/themes/theme/inc/dwl-file.php?get_image=https://files.plytix.com/api/v1.1/rn/public_files/pim/assets/42/1a/77/5f/5f771a42758cab15f10cfaf8/images/da/54/3f/60/603f54dab7900c7a8f70de49/IMG_4758_vierkant.jpg/PACAERUL15_6.jpg?s=700x",
-    "https://i.etsystatic.com/6728015/r/il/13a369/436276522/il_1080xN.436276522_d112.jpg",
-    "https://images.squarespace-cdn.com/content/v1/59cb502e1f318dc50f160957/1582579869308-EVA7GHIGKEA95TDGW504/pansy-flower.jpg",
-    "https://www.gardendesign.com/pictures/images/675x529Max/site_3/helianthus-yellow-flower-pixabay_11863.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/3/39/Bachelor%27s_button%2C_Basket_flower%2C_Boutonniere_flower%2C_Cornflower_-_3.jpg",
-    "https://i.pinimg.com/736x/4d/50/6c/4d506c5825262993e40e57ba1837cf28.jpg",
-    "https://www.hoselink.com.au/cdn/shop/articles/blue_hydrangea.jpg?v=1643922916",
-    "https://tualatinswcd.org/wp-content/uploads/2022/07/WildRadishFlowers02Small_IPMImages.png",
-    "https://images.squarespace-cdn.com/content/v1/659e7ec5bf381311256941fb/710132da-0322-4ca4-8639-8570ea8ef7ba/field-scabious-5370206_1280.jpg"
+    "badui/plant-1.jpg",
+    "badui/plant-2.jpg",
+    "badui/plant-3.jpg",
+    "badui/plant-4.jpg",
+    "badui/plant-5.jpg",
+    "badui/plant-6.jpg",
+    "badui/plant-7.jpg",
+    "badui/plant-8.jpg",
+    "badui/plant-9.jpg",
+    "badui/plant-10.jpg",
+    "badui/plant-11.jpg",
+    "badui/plant-12.jpg",
+    "badui/plant-13.png",
+    "badui/plant-14.jpg"
   ];
 
   const upsellData = [
-    { name: "DJUNGELSKOG Bear", img: "https://www.ikea.com/nz/en/images/products/djungelskog-soft-toy-brown-bear__0710168_pe727370_s5.jpg?f=xl", price: 29.00, isUpsell: true },
-    { name: "DJUNGELSKOG Snake", img: "https://www.ikea.com/nz/en/images/products/djungelskog-glove-puppet-snake-burmese-python__0710178_pe727381_s5.jpg?f=xl", price: 19.00, isUpsell: true },
-    { name: "BLÅVINGAD Octopus", img: "https://www.ikea.com/nz/en/images/products/blavingad-soft-toy-octopus-yellow__1088894_pe861308_s5.jpg?f=xl", price: 24.00, isUpsell: true },
-    { name: "ÅRSTID Table Lamp", img: "https://www.ikea.com/nz/en/images/products/arstid-table-lamp-brass-white__0609329_pe684454_s5.jpg?f=xl", price: 79.00, isUpsell: true }
+    { name: "DJUNGELSKOG Bear", img: "badui/upsell-bear.jpg", price: 29.00, isUpsell: true },
+    { name: "DJUNGELSKOG Snake", img: "badui/upsell-snake.jpg", price: 19.00, isUpsell: true },
+    { name: "BLÅVINGAD Octopus", img: "badui/upsell-octopus.jpg", price: 24.00, isUpsell: true },
+    { name: "ÅRSTID Table Lamp", img: "badui/upsell-lamp.jpg", price: 79.00, isUpsell: true }
   ];
   
   const fakeCustomerNames = [
@@ -1104,7 +1104,7 @@
       return;
     } else if (trueBuyAvailable) {
       // Add the shark to cart (not marked as upsell)
-      addToCart({ name: "BLÅHAJ Shark", img: "https://www.ikea.com/nz/en/images/products/blahaj-soft-toy-shark__0710175_pe727378_s5.jpg", price: 39.00, isUpsell: false });
+      addToCart({ name: "BLÅHAJ Shark", img: "badui/blahaj-shark.jpg", price: 39.00, isUpsell: false });
       openCart();
     } else {
       showCaptcha();
